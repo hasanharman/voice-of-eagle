@@ -13,6 +13,7 @@ import {
   throttle,
   isWithinFieldBounds,
 } from "@/lib/store/player.store";
+import { toast } from "sonner";
 
 interface FootballFieldProps {
   onPlayerSlotClick: (positionId: string) => void;
@@ -177,6 +178,9 @@ export default function FootballField({
           details:
             "⚠️ Oyuncu eski konumuna döndü - saha sınırları dışına bırakılamaz",
         });
+        toast.error(
+          "Oyuncu eski konumuna döndü - saha sınırları dışına bırakılamaz"
+        );
         resetDragState();
         return;
       }
@@ -211,6 +215,11 @@ export default function FootballField({
         `📍 Valid drop: (${constrainedPosition.x.toFixed(
           1
         )}, ${constrainedPosition.y.toFixed(1)}) - ${detection.position} (${(
+          detection.confidence * 100
+        ).toFixed(0)}% confidence)`
+      );
+      toast.success(
+        `Oyuncu yeni konumda: ${detection.position} (${(
           detection.confidence * 100
         ).toFixed(0)}% confidence)`
       );
@@ -256,6 +265,7 @@ export default function FootballField({
           type: null,
           details: "⚠️ Yedeği saha sınırları dışına bırakamazsınız",
         });
+        toast.warning("Yedeği saha sınırları dışına bırakamazsınız");
         setDraggedPlayer(null, null);
         return;
       }
@@ -281,6 +291,9 @@ export default function FootballField({
           type: "substitute",
           details: `${draggedPlayer.name} ↔ ${occupiedPlayer.name} değişikliği yapıldı`,
         });
+        toast.success(
+          `${draggedPlayer.name} ↔ ${occupiedPlayer.name} değişikliği yapıldı`
+        );
       } else {
         // Add substitute to empty field position
         console.log(`➕ Adding ${draggedPlayer.name} to field`);
@@ -289,6 +302,7 @@ export default function FootballField({
           type: "substitute",
           details: `${draggedPlayer.name} sahaya eklendi`,
         });
+        toast.success(`${draggedPlayer.name} sahaya eklendi`);
       }
 
       setDraggedPlayer(null, null);
@@ -492,44 +506,6 @@ export default function FootballField({
           </motion.div>
         )}
       </div>
-
-      {/* Operation Log */}
-      {dragOperation.type && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className={`p-3 rounded-lg border ${
-            dragOperation.type === "substitute"
-              ? "bg-blue-50 border-blue-200 text-blue-800"
-              : "bg-green-50 border-green-200 text-green-800"
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">
-              {dragOperation.type === "substitute"
-                ? "🔄 Değişiklik:"
-                : "📍 Pozisyon Güncellemesi:"}
-            </span>
-            <span className="text-sm">{dragOperation.details}</span>
-          </div>
-        </motion.div>
-      )}
-
-      {/* Warning message for violations */}
-      {dragOperation.details.includes("⚠️") && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="p-3 rounded-lg border bg-yellow-50 border-yellow-200 text-yellow-800"
-        >
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">⚠️ Uyarı:</span>
-            <span className="text-sm">{dragOperation.details}</span>
-          </div>
-        </motion.div>
-      )}
     </div>
   );
 }
