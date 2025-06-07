@@ -11,10 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FileText, Users, Share2, RotateCcw, Armchair } from "lucide-react";
-import { LoginButton } from "@/components/auth/login-button";
-import { UserMenu } from "@/components/auth/user-menu";
-import { useAuth } from "@/hooks/useAuth";
+import { RotateCcw } from "lucide-react";
+
 import FootballField from "./field";
 import PlayerSelectionResponsive from "./player-select";
 import { usePlayerStore, formations } from "@/lib/store/player.store";
@@ -27,8 +25,7 @@ export default function LineupBuilder() {
     lineupPlayers,
     substituteePlayers,
   } = usePlayerStore();
-  
-  const { user, loading } = useAuth();
+
   const [isPlayerDrawerOpen, setIsPlayerDrawerOpen] = useState(false);
   const [selectedPositionId, setSelectedPositionId] = useState<string | null>(
     null
@@ -57,7 +54,7 @@ export default function LineupBuilder() {
       : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="p-4">
       <div className="max-w-md mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -76,13 +73,6 @@ export default function LineupBuilder() {
             >
               <RotateCcw className="h-4 w-4" />
             </Button>
-            {loading ? (
-              <div className="h-8 w-8 animate-pulse bg-gray-200 rounded-full" />
-            ) : user ? (
-              <UserMenu />
-            ) : (
-              <LoginButton />
-            )}
           </div>
         </div>
 
@@ -110,30 +100,7 @@ export default function LineupBuilder() {
           <FootballField onPlayerSlotClick={handlePlayerSlotClick} />
         </Card>
 
-        {/* Bottom Navigation */}
-        <div className="flex justify-around bg-white rounded-lg p-2 shadow-sm border border-gray-200">
-          <Button
-            variant="ghost"
-            className="flex flex-col items-center gap-1 flex-1 text-gray-600 hover:bg-gray-50"
-          >
-            <FileText className="h-5 w-5" />
-            <span className="text-xs">Haberler</span>
-          </Button>
-          <Button
-            variant="ghost"
-            className="flex flex-col items-center gap-1 flex-1 bg-blue-50 text-blue-600"
-          >
-            <Users className="h-5 w-5" />
-            <span className="text-xs">Kadro</span>
-          </Button>
-          <Button
-            variant="ghost"
-            className="flex flex-col items-center gap-1 flex-1 text-gray-600 hover:bg-gray-50"
-          >
-            <Share2 className="h-5 w-5" />
-            <span className="text-xs">Sosyal</span>
-          </Button>
-        </div>
+
 
         {/* Player Selection Drawer */}
         <PlayerSelectionResponsive
