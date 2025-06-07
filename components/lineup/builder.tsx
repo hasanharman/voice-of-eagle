@@ -12,6 +12,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FileText, Users, Share2, RotateCcw, Armchair } from "lucide-react";
+import { LoginButton } from "@/components/auth/login-button";
+import { UserMenu } from "@/components/auth/user-menu";
+import { useAuth } from "@/hooks/useAuth";
 import FootballField from "./field";
 import PlayerSelectionResponsive from "./player-select";
 import { usePlayerStore, formations } from "@/lib/store/player.store";
@@ -24,6 +27,8 @@ export default function LineupBuilder() {
     lineupPlayers,
     substituteePlayers,
   } = usePlayerStore();
+  
+  const { user, loading } = useAuth();
   const [isPlayerDrawerOpen, setIsPlayerDrawerOpen] = useState(false);
   const [selectedPositionId, setSelectedPositionId] = useState<string | null>(
     null
@@ -71,6 +76,13 @@ export default function LineupBuilder() {
             >
               <RotateCcw className="h-4 w-4" />
             </Button>
+            {loading ? (
+              <div className="h-8 w-8 animate-pulse bg-gray-200 rounded-full" />
+            ) : user ? (
+              <UserMenu />
+            ) : (
+              <LoginButton />
+            )}
           </div>
         </div>
 
