@@ -1,7 +1,7 @@
-// components/player-selection-responsive.tsx
-"use client";
+"use client"
 
 import { useState, useMemo, useEffect } from "react";
+
 import {
   Dialog,
   DialogContent,
