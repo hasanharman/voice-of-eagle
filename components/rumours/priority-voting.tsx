@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,7 +23,38 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
   const [userPriority, setUserPriority] = useState<
     "high" | "medium" | "low" | null
   >(null);
+  const [isLoading, setIsLoading] = useState(true);
   const supabase = createClient();
+
+  useEffect(() => {
+    const fetchUserPriority = async () => {
+      if (!user) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from("priority_votes")
+          .select("priority_level")
+          .eq("rumour_id", rumour.id)
+          .eq("user_id", user.id)
+          .single();
+
+        if (error && error.code !== "PGRST116") {
+          console.error("Error fetching user priority:", error);
+        } else if (data) {
+          setUserPriority(data.priority_level);
+        }
+      } catch (error) {
+        console.error("Error fetching user priority:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserPriority();
+  }, [user, rumour.id, supabase]);
 
   const handlePriorityVote = async (priority: "high" | "medium" | "low") => {
     if (!user) {
@@ -31,10 +62,20 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
       return;
     }
 
+    if (isVoting) return;
+
+    const rateLimitKey = `priority_${user.id}`;
+    const lastVoteTime = localStorage.getItem(rateLimitKey);
+    const now = Date.now();
+    
+    if (lastVoteTime && now - parseInt(lastVoteTime) < 1000) {
+      toast.error("Please wait before voting again");
+      return;
+    }
+
     setIsVoting(true);
 
     try {
-      // If user already voted the same priority, remove the vote
       if (userPriority === priority) {
         const { error } = await supabase
           .from("priority_votes")
@@ -46,7 +87,6 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
         setUserPriority(null);
         toast.success("Priority vote removed");
       } else {
-        // Insert or update priority vote
         const { error } = await supabase.from("priority_votes").upsert({
           rumour_id: rumour.id,
           user_id: user.id,
@@ -59,7 +99,7 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
         toast.success(`Voted ${priority} priority!`);
       }
 
-      // Trigger a refresh of the data
+      localStorage.setItem(rateLimitKey, now.toString());
       window.location.reload();
     } catch (error) {
       console.error("Error voting priority:", error);
@@ -102,7 +142,7 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
                 variant={userPriority === priority ? "default" : "outline"}
                 size="sm"
                 onClick={() => handlePriorityVote(priority)}
-                disabled={isVoting}
+                disabled={isVoting || isLoading}
                 className="w-full justify-between"
               >
                 <span className="capitalize">{priority} Priority</span>
