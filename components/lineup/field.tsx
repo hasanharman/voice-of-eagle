@@ -14,6 +14,7 @@ import {
   isWithinFieldBounds,
 } from "@/lib/store/player.store";
 import { toast } from "sonner";
+import { useI18n } from "@/lib/i18n/context";
 
 interface FootballFieldProps {
   onPlayerSlotClick: (positionId: string) => void;
@@ -22,6 +23,7 @@ interface FootballFieldProps {
 export default function FootballField({
   onPlayerSlotClick,
 }: FootballFieldProps) {
+  const { t } = useI18n()
   const {
     selectedFormation,
     lineupPlayers,
@@ -498,9 +500,9 @@ export default function FootballField({
                   />
                 </svg>
               </div>
-              <p className="text-blue-700 font-medium">Yedeği sahaya bırak</p>
+              <p className="text-blue-700 font-medium">{t('lineup.dropSubstituteHere')}</p>
               <p className="text-blue-600 text-sm">
-                Oyuncunun üzerine bırakarak değiştir
+                {t('lineup.dropToReplace')}
               </p>
             </div>
           </motion.div>

@@ -126,7 +126,7 @@ const PlayerCard = memo(function PlayerCard({
         transition={{ duration: 0.2 }}
       >
         <motion.div
-          className="relative w-20 h-28 bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-lg border border-gray-600 shadow-2xl overflow-hidden"
+          className="relative w-20 h-28 bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-lg border border-border shadow-2xl overflow-hidden"
           animate={{
             boxShadow: isDragging
               ? "0 25px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1)"

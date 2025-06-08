@@ -7,6 +7,16 @@ export const translations = {
       notifications: 'Bildirimler',
       markAllAsRead: 'Tümünü okundu olarak işaretle'
     },
+    lineup: {
+      dropSubstituteHere: 'Yedeği sahaya bırak',
+      dropToReplace: 'Oyuncunun üzerine bırakarak değiştir',
+      noPlayersFound: 'Oyuncu bulunamadı',
+      tryAdjustingSearch: 'Arama kriterlerinizi değiştirmeyi deneyin',
+      searchPlayers: 'Oyuncu ara...',
+      selectPlayer: 'Oyuncu Seç',
+      choosePlayerForPosition: 'Bu pozisyon için bir oyuncu seçin',
+      inLineup: 'Kadroda',
+    },
     common: {
       loading: 'Yükleniyor...',
       error: 'Hata',
@@ -20,6 +30,16 @@ export const translations = {
       purpose: 'Purpose',
       notifications: 'Notifications',
       markAllAsRead: 'Mark all as read'
+    },
+    lineup: {
+      dropSubstituteHere: 'Drop substitute here',
+      dropToReplace: 'Drop on player to substitute',
+      noPlayersFound: 'No players found',
+      tryAdjustingSearch: 'Try adjusting your search',
+      searchPlayers: 'Search players...',
+      selectPlayer: 'Select Player',
+      choosePlayerForPosition: 'Choose a player for this position',
+      inLineup: 'In lineup',
     },
     common: {
       loading: 'Loading...',
