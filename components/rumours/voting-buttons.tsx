@@ -7,6 +7,7 @@ import { RumourWithScores } from "@/lib/types/rumours.types";
 import { useAuth } from "@/hooks/useAuth";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
+import { SignupDialog } from "@/components/auth/signup-dialog";
 
 interface VotingButtonsProps {
   rumour: RumourWithScores;
@@ -17,6 +18,7 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
   const [isVoting, setIsVoting] = useState(false);
   const [userVote, setUserVote] = useState<"upvote" | "downvote" | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showSignupDialog, setShowSignupDialog] = useState(false);
   const supabase = createClient();
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
 
   const handleVote = async (voteType: "upvote" | "downvote") => {
     if (!user) {
-      toast.error("Please sign in to vote");
+      setShowSignupDialog(true);
       return;
     }
 
@@ -139,6 +141,10 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
           {rumour.total_community_votes} votes
         </div>
       </div>
+      <SignupDialog 
+        open={showSignupDialog} 
+        onOpenChange={setShowSignupDialog} 
+      />
     </div>
   );
 }

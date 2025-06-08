@@ -12,6 +12,7 @@ import { RumourWithScores } from "@/lib/types/rumours.types";
 import { useAuth } from "@/hooks/useAuth";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
+import { SignupDialog } from "@/components/auth/signup-dialog";
 
 interface PriorityVotingProps {
   rumour: RumourWithScores;
@@ -24,6 +25,7 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
     "high" | "medium" | "low" | null
   >(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showSignupDialog, setShowSignupDialog] = useState(false);
   const supabase = createClient();
 
   useEffect(() => {
@@ -58,7 +60,7 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
 
   const handlePriorityVote = async (priority: "high" | "medium" | "low") => {
     if (!user) {
-      toast.error("Please sign in to vote on priority");
+      setShowSignupDialog(true);
       return;
     }
 
@@ -162,6 +164,10 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
           </div>
         </div>
       </PopoverContent>
+      <SignupDialog 
+        open={showSignupDialog} 
+        onOpenChange={setShowSignupDialog} 
+      />
     </Popover>
   );
 }
