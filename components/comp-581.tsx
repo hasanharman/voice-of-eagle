@@ -2,6 +2,9 @@ import InfoMenu from "@/components/navbar-components/info-menu"
 import Logo from "@/components/navbar-components/logo"
 import NotificationMenu from "@/components/navbar-components/notification-menu"
 import UserMenu from "@/components/navbar-components/user-menu"
+import ThemeSwitcher from "@/components/navbar-components/theme-switcher"
+import SocialButtons from "@/components/navbar-components/social-buttons"
+import LanguageSwitcher from "@/components/navbar-components/language-switcher"
 import { Button } from "@/components/ui/button"
 import {
   NavigationMenu,
@@ -107,6 +110,12 @@ export default function Component() {
         {/* Right side */}
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
+            {/* Social buttons */}
+            <SocialButtons />
+            {/* Theme switcher */}
+            <ThemeSwitcher />
+            {/* Language switcher */}
+            <LanguageSwitcher />
             {/* Info menu */}
             <InfoMenu />
             {/* Notification */}
