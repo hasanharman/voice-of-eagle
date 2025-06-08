@@ -33,7 +33,7 @@ export default function RootLayout({
       >
         <AuthProvider>
           <Navbar />
-          <main>{children}</main>
+          <main className="h-[calc(100vh-68px)] bg-gray-50">{children}</main>
           <Toaster />
         </AuthProvider>
       </body>

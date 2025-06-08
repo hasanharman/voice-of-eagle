@@ -36,11 +36,6 @@ export default function LineupBuilder() {
     setIsPlayerDrawerOpen(true);
   };
 
-  const handleSubstituteClick = (playerId: string) => {
-    // Handle substitute selection if needed
-    console.log("Substitute clicked:", playerId);
-  };
-
   const handleFormationChange = (formation: keyof typeof formations) => {
     setFormation(formation);
   };
@@ -56,28 +51,8 @@ export default function LineupBuilder() {
   return (
     <div className="p-4">
       <div className="max-w-md mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-              <div className="w-3 h-3 bg-white rounded-full"></div>
-            </div>
-            <span className="font-bold text-gray-800 text-lg">LINEUP</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={resetLineup}
-              className="text-gray-600 border-gray-300 hover:bg-gray-100"
-            >
-              <RotateCcw className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-
         {/* Formation Selector */}
-        <div className="mb-6">
+        <div className="flex items-center gap-4 mb-6">
           <Select
             value={selectedFormation}
             onValueChange={handleFormationChange}
@@ -93,14 +68,20 @@ export default function LineupBuilder() {
               ))}
             </SelectContent>
           </Select>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={resetLineup}
+            className="text-gray-600 border-gray-300 hover:bg-gray-100"
+          >
+            <RotateCcw className="h-4 w-4" />
+          </Button>
         </div>
 
         {/* Football Field */}
         <Card className="p-2 rounded-3xl border-2 border-white mb-6 overflow-hidden drop-shadow-lg">
           <FootballField onPlayerSlotClick={handlePlayerSlotClick} />
         </Card>
-
-
 
         {/* Player Selection Drawer */}
         <PlayerSelectionResponsive
