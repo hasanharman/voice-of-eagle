@@ -1,26 +1,45 @@
-import { Suspense } from "react";
-import { createClient } from "@/lib/supabase/server";
+"use client";
+
+import { Suspense, useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 import { DataTable } from "@/components/rumours/data-table";
 import { columns } from "@/components/rumours/columns";
 import { RumourWithScores } from "@/lib/types/rumours.types";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import Link from "next/link";
+import { AdminAddButton } from "@/components/rumours/admin-add-button";
 
-async function getRumours(): Promise<RumourWithScores[]> {
-  const supabase = await createClient();
+function useRumours() {
+  const [rumours, setRumours] = useState<RumourWithScores[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const { data, error } = await supabase
-    .from("rumours_with_scores")
-    .select("*")
-    .order("created_at", { ascending: false });
+  useEffect(() => {
+    const fetchRumours = async () => {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("rumours_with_scores")
+          .select("*")
+          .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error("Error fetching rumours:", error);
-    return [];
-  }
+        if (error) {
+          console.error("Error fetching rumours:", error);
+          setError(error.message);
+          return;
+        }
 
-  return data || [];
+        setRumours(data || []);
+      } catch (err) {
+        console.error("Error fetching rumours:", err);
+        setError("Failed to fetch rumours");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRumours();
+  }, []);
+
+  return { rumours, loading, error };
 }
 
 function RumoursTableSkeleton() {
@@ -37,7 +56,7 @@ function RumoursTableSkeleton() {
   );
 }
 
-export default async function RumoursPage() {
+export default function RumoursPage() {
   return (
     <div className="container mx-auto py-8">
       <div className="flex items-center justify-between mb-8">
@@ -47,23 +66,28 @@ export default async function RumoursPage() {
             Community-driven transfer rumours with voting and priority levels
           </p>
         </div>
-        <Button asChild>
-          <Link href="/rumours/add">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Rumour
-          </Link>
-        </Button>
+        <AdminAddButton />
       </div>
 
-      <Suspense fallback={<RumoursTableSkeleton />}>
-        <RumoursTable />
-      </Suspense>
+      <RumoursTable />
     </div>
   );
 }
 
-async function RumoursTable() {
-  const rumours = await getRumours();
+function RumoursTable() {
+  const { rumours, loading, error } = useRumours();
+
+  if (loading) {
+    return <RumoursTableSkeleton />;
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-red-500">Error loading rumours: {error}</p>
+      </div>
+    );
+  }
 
   return <DataTable columns={columns} data={rumours} />;
 }

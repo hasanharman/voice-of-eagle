@@ -14,12 +14,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import Link from "next/link"
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/", label: "Kadro" },
-  { href: "/haberler", label: "Haberler" },
-  { href: "/sosyal", label: "Sosyal" },
+  { href: "/rumours", label: "Rumours" },
+  { href: "/lineup", label: "Lineup" },
+  { href: "/purpose", label: "Purpose" },
 ]
 
 export default function Component() {
@@ -68,8 +69,10 @@ export default function Component() {
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index} className="w-full">
-                      <NavigationMenuLink href={link.href} className="py-1.5">
-                        {link.label}
+                      <NavigationMenuLink asChild className="py-1.5">
+                        <Link href={link.href}>
+                          {link.label}
+                        </Link>
                       </NavigationMenuLink>
                     </NavigationMenuItem>
                   ))}
@@ -88,10 +91,12 @@ export default function Component() {
                 {navigationLinks.map((link, index) => (
                   <NavigationMenuItem key={index}>
                     <NavigationMenuLink
-                      href={link.href}
+                      asChild
                       className="text-muted-foreground hover:text-primary py-1.5 font-medium"
                     >
-                      {link.label}
+                      <Link href={link.href}>
+                        {link.label}
+                      </Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                 ))}

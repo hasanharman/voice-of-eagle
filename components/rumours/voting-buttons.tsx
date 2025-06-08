@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 import { RumourWithScores } from "@/lib/types/rumours.types";
 import { useAuth } from "@/hooks/useAuth";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
+import { SignupDialog } from "@/components/auth/signup-dialog";
 
 interface VotingButtonsProps {
   rumour: RumourWithScores;
@@ -16,18 +17,60 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
   const { user } = useAuth();
   const [isVoting, setIsVoting] = useState(false);
   const [userVote, setUserVote] = useState<"upvote" | "downvote" | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showSignupDialog, setShowSignupDialog] = useState(false);
   const supabase = createClient();
+
+  useEffect(() => {
+    const fetchUserVote = async () => {
+      if (!user) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from("community_votes")
+          .select("vote_type")
+          .eq("rumour_id", rumour.id)
+          .eq("user_id", user.id)
+          .single();
+
+        if (error && error.code !== "PGRST116") {
+          console.error("Error fetching user vote:", error);
+        } else if (data) {
+          setUserVote(data.vote_type);
+        }
+      } catch (error) {
+        console.error("Error fetching user vote:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserVote();
+  }, [user, rumour.id, supabase]);
 
   const handleVote = async (voteType: "upvote" | "downvote") => {
     if (!user) {
-      toast.error("Please sign in to vote");
+      setShowSignupDialog(true);
+      return;
+    }
+
+    if (isVoting) return;
+
+    const rateLimitKey = `vote_${user.id}`;
+    const lastVoteTime = localStorage.getItem(rateLimitKey);
+    const now = Date.now();
+    
+    if (lastVoteTime && now - parseInt(lastVoteTime) < 1000) {
+      toast.error("Please wait before voting again");
       return;
     }
 
     setIsVoting(true);
 
     try {
-      // If user already voted the same way, remove the vote
       if (userVote === voteType) {
         const { error } = await supabase
           .from("community_votes")
@@ -39,7 +82,6 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
         setUserVote(null);
         toast.success("Vote removed");
       } else {
-        // Insert or update vote
         const { error } = await supabase.from("community_votes").upsert({
           rumour_id: rumour.id,
           user_id: user.id,
@@ -52,8 +94,8 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
         toast.success(`${voteType === "upvote" ? "Upvoted" : "Downvoted"}!`);
       }
 
-      // Trigger a refresh of the data
-      window.location.reload(); // Simple approach, you might want to use a more sophisticated state management
+      localStorage.setItem(rateLimitKey, now.toString());
+      window.location.reload();
     } catch (error) {
       console.error("Error voting:", error);
       toast.error("Failed to vote. Please try again.");
@@ -76,7 +118,7 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
           variant={userVote === "upvote" ? "default" : "ghost"}
           size="sm"
           onClick={() => handleVote("upvote")}
-          disabled={isVoting}
+          disabled={isVoting || isLoading}
           className="h-8 w-8 p-0"
         >
           <ThumbsUp className="h-3 w-3" />
@@ -85,7 +127,7 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
           variant={userVote === "downvote" ? "destructive" : "ghost"}
           size="sm"
           onClick={() => handleVote("downvote")}
-          disabled={isVoting}
+          disabled={isVoting || isLoading}
           className="h-8 w-8 p-0"
         >
           <ThumbsDown className="h-3 w-3" />
@@ -99,6 +141,10 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
           {rumour.total_community_votes} votes
         </div>
       </div>
+      <SignupDialog 
+        open={showSignupDialog} 
+        onOpenChange={setShowSignupDialog} 
+      />
     </div>
   );
 }

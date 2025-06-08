@@ -7,12 +7,26 @@ import { useEffect, useState } from 'react'
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
   const supabase = createClient()
 
   useEffect(() => {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
+      
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('is_admin')
+          .eq('id', user.id)
+          .single()
+        
+        setIsAdmin(profile?.is_admin || false)
+      } else {
+        setIsAdmin(false)
+      }
+      
       setLoading(false)
     }
 
@@ -21,6 +35,19 @@ export function useAuth() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         setUser(session?.user ?? null)
+        
+        if (session?.user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('is_admin')
+            .eq('id', session.user.id)
+            .single()
+          
+          setIsAdmin(profile?.is_admin || false)
+        } else {
+          setIsAdmin(false)
+        }
+        
         setLoading(false)
       }
     )
@@ -54,6 +81,7 @@ export function useAuth() {
         method: 'POST',
       })
       setUser(null)
+      setIsAdmin(false)
     } catch (error) {
       console.error('Error signing out:', error)
     }
@@ -62,6 +90,7 @@ export function useAuth() {
   return {
     user,
     loading,
+    isAdmin,
     signInWithGoogle,
     signOut,
   }
