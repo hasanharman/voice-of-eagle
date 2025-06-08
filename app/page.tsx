@@ -1,5 +1,5 @@
-import LineupBuilder from "@/components/lineup/builder";
+import RumoursPage from "./rumours/page";
 
 export default function Home() {
-  return <LineupBuilder />;
+  return <RumoursPage />;
 }
