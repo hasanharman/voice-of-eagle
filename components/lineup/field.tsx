@@ -180,9 +180,7 @@ export default function FootballField({
           details:
             "⚠️ Oyuncu eski konumuna döndü - saha sınırları dışına bırakılamaz",
         });
-        toast.error(
-          "Oyuncu eski konumuna döndü - saha sınırları dışına bırakılamaz"
-        );
+        toast.error(t('lineup.playerReturnedToPosition'));
         resetDragState();
         return;
       }
@@ -221,7 +219,7 @@ export default function FootballField({
         ).toFixed(0)}% confidence)`
       );
       toast.success(
-        `Oyuncu yeni konumda: ${detection.position} (${(
+        `${t('lineup.playerNewPosition')}: ${detection.position} (${(
           detection.confidence * 100
         ).toFixed(0)}% confidence)`
       );
@@ -267,7 +265,7 @@ export default function FootballField({
           type: null,
           details: "⚠️ Yedeği saha sınırları dışına bırakamazsınız",
         });
-        toast.warning("Yedeği saha sınırları dışına bırakamazsınız");
+        toast.warning(t('lineup.cannotDropSubstituteOutside'));
         setDraggedPlayer(null, null);
         return;
       }
@@ -294,7 +292,7 @@ export default function FootballField({
           details: `${draggedPlayer.name} ↔ ${occupiedPlayer.name} değişikliği yapıldı`,
         });
         toast.success(
-          `${draggedPlayer.name} ↔ ${occupiedPlayer.name} değişikliği yapıldı`
+          `${draggedPlayer.name} ↔ ${occupiedPlayer.name} ${t('lineup.substitutionMade')}`
         );
       } else {
         // Add substitute to empty field position
@@ -304,7 +302,7 @@ export default function FootballField({
           type: "substitute",
           details: `${draggedPlayer.name} sahaya eklendi`,
         });
-        toast.success(`${draggedPlayer.name} sahaya eklendi`);
+        toast.success(`${draggedPlayer.name} ${t('lineup.playerAddedToField')}`);
       }
 
       setDraggedPlayer(null, null);

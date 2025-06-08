@@ -1,6 +1,6 @@
 "use client"
 
-import InfoMenu from "@/components/navbar-components/info-menu"
+import AddRumourButton from "@/components/navbar-components/add-rumour-button"
 import Logo from "@/components/navbar-components/logo"
 import NotificationMenu from "@/components/navbar-components/notification-menu"
 import UserMenu from "@/components/navbar-components/user-menu"
@@ -120,8 +120,8 @@ export default function Component() {
             <ThemeSwitcher />
             {/* Language switcher */}
             <LanguageSwitcher />
-            {/* Info menu */}
-            <InfoMenu />
+            {/* Add rumour button */}
+            <AddRumourButton />
             {/* Notification */}
             <NotificationMenu />
           </div>

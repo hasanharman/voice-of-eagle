@@ -6,6 +6,7 @@ import { DataTable } from "@/components/rumours/data-table";
 import { columns } from "@/components/rumours/columns";
 import { RumourWithScores } from "@/lib/types/rumours.types";
 import { AdminAddButton } from "@/components/rumours/admin-add-button";
+import { useI18n } from "@/lib/i18n/context";
 
 function useRumours() {
   const [rumours, setRumours] = useState<RumourWithScores[]>([]);
@@ -57,13 +58,15 @@ function RumoursTableSkeleton() {
 }
 
 export default function RumoursPage() {
+  const { t } = useI18n();
+  
   return (
     <div className="container mx-auto py-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Transfer Rumours</h1>
+          <h1 className="text-3xl font-bold">{t('rumours.title')}</h1>
           <p className="text-muted-foreground">
-            Community-driven transfer rumours with voting and priority levels
+            {t('rumours.subtitle')}
           </p>
         </div>
         <AdminAddButton />
@@ -75,6 +78,7 @@ export default function RumoursPage() {
 }
 
 function RumoursTable() {
+  const { t } = useI18n();
   const { rumours, loading, error } = useRumours();
 
   if (loading) {
@@ -84,7 +88,7 @@ function RumoursTable() {
   if (error) {
     return (
       <div className="text-center py-8">
-        <p className="text-red-500">Error loading rumours: {error}</p>
+        <p className="text-red-500">{t('rumours.errorLoading')}: {error}</p>
       </div>
     );
   }
