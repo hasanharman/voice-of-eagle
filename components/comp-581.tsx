@@ -1,3 +1,5 @@
+"use client"
+
 import InfoMenu from "@/components/navbar-components/info-menu"
 import Logo from "@/components/navbar-components/logo"
 import NotificationMenu from "@/components/navbar-components/notification-menu"
