@@ -16,8 +16,10 @@ import { RotateCcw } from "lucide-react";
 import FootballField from "./field";
 import PlayerSelectionResponsive from "./player-select";
 import { usePlayerStore, formations } from "@/lib/store/player.store";
+import { useI18n } from "@/lib/i18n/context";
 
 export default function LineupBuilder() {
+  const { t } = useI18n();
   const {
     selectedFormation,
     setFormation,
@@ -58,7 +60,7 @@ export default function LineupBuilder() {
             onValueChange={handleFormationChange}
           >
             <SelectTrigger className="w-full bg-background border-border shadow-sm">
-              <SelectValue placeholder="Select formation" />
+              <SelectValue placeholder={t('lineup.selectFormation')} />
             </SelectTrigger>
             <SelectContent>
               {Object.keys(formations).map((formation) => (

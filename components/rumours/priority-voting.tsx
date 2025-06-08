@@ -13,12 +13,14 @@ import { useAuth } from "@/hooks/useAuth";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { SignupDialog } from "@/components/auth/signup-dialog";
+import { useI18n } from "@/lib/i18n/context";
 
 interface PriorityVotingProps {
   rumour: RumourWithScores;
 }
 
 export function PriorityVoting({ rumour }: PriorityVotingProps) {
+  const { t } = useI18n();
   const { user } = useAuth();
   const [isVoting, setIsVoting] = useState(false);
   const [userPriority, setUserPriority] = useState<
@@ -71,7 +73,7 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
     const now = Date.now();
     
     if (lastVoteTime && now - parseInt(lastVoteTime) < 1000) {
-      toast.error("Please wait before voting again");
+      toast.error(t('voting.pleaseWaitBeforeVoting'));
       return;
     }
 
@@ -87,7 +89,7 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
 
         if (error) throw error;
         setUserPriority(null);
-        toast.success("Priority vote removed");
+        toast.success(t('voting.priorityVoteRemoved'));
       } else {
         const { error } = await supabase.from("priority_votes").upsert({
           rumour_id: rumour.id,
@@ -98,14 +100,14 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
 
         if (error) throw error;
         setUserPriority(priority);
-        toast.success(`Voted ${priority} priority!`);
+        toast.success(`${t('common.' + priority)} ${t('voting.votedPriority')}`);
       }
 
       localStorage.setItem(rateLimitKey, now.toString());
       window.location.reload();
     } catch (error) {
       console.error("Error voting priority:", error);
-      toast.error("Failed to vote. Please try again.");
+      toast.error(t('voting.failedToVote'));
     } finally {
       setIsVoting(false);
     }
