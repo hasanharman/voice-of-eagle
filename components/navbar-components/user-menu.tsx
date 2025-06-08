@@ -39,7 +39,7 @@ export default function UserMenu() {
   }
 
   if (loading) {
-    return <div className="h-8 w-8 animate-pulse bg-gray-200 rounded-full" />
+    return <div className="h-8 w-8 animate-pulse bg-muted rounded-full" />
   }
 
   if (!user) {

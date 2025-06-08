@@ -57,7 +57,7 @@ export default function LineupBuilder() {
             value={selectedFormation}
             onValueChange={handleFormationChange}
           >
-            <SelectTrigger className="w-full bg-white border-gray-200 shadow-sm">
+            <SelectTrigger className="w-full bg-background border-border shadow-sm">
               <SelectValue placeholder="Select formation" />
             </SelectTrigger>
             <SelectContent>
@@ -72,7 +72,7 @@ export default function LineupBuilder() {
             variant="outline"
             size="icon"
             onClick={resetLineup}
-            className="text-gray-600 border-gray-300 hover:bg-gray-100"
+            className="text-muted-foreground border-border hover:bg-muted"
           >
             <RotateCcw className="h-4 w-4" />
           </Button>

@@ -74,7 +74,7 @@ export default function RootLayout({
           <I18nProvider>
             <AuthProvider>
               <Navbar />
-              <main className="h-[calc(100vh-68px)] bg-gray-50">{children}</main>
+              <main className="h-[calc(100vh-68px)] bg-background">{children}</main>
               <Toaster />
             </AuthProvider>
           </I18nProvider>

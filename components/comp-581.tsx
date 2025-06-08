@@ -18,15 +18,17 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import Link from "next/link"
-
-// Navigation links array to be used in both desktop and mobile menus
-const navigationLinks = [
-  { href: "/rumours", label: "Rumours" },
-  { href: "/lineup", label: "Lineup" },
-  { href: "/purpose", label: "Purpose" },
-]
+import { useI18n } from "@/lib/i18n/context"
 
 export default function Component() {
+  const { t } = useI18n()
+
+  const navigationLinks = [
+    { href: "/rumours", label: t('nav.rumours') },
+    { href: "/lineup", label: t('nav.lineup') },
+    { href: "/purpose", label: t('nav.purpose') },
+  ]
+
   return (
     <header className="border-b px-4 md:px-6">
       <div className="flex h-16 items-center justify-between gap-4">
