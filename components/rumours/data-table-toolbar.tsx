@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { DataTableViewOptions } from "@/components/rumours/data-table-view-options";
 import { DataTableFacetedFilter } from "@/components/rumours/data-table-faceted-filter";
 import { Cross } from "lucide-react";
+import { useI18n } from "@/lib/i18n/context";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -15,6 +16,7 @@ interface DataTableToolbarProps<TData> {
 export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
+  const { t } = useI18n();
   const isFiltered = table.getState().columnFilters.length > 0;
 
   // Filter options
@@ -59,7 +61,7 @@ export function DataTableToolbar<TData>({
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder="Filter players..."
+          placeholder={t('table.filterPlayers')}
           value={
             (table.getColumn("player_name")?.getFilterValue() as string) ?? ""
           }
@@ -72,7 +74,7 @@ export function DataTableToolbar<TData>({
         {table.getColumn("positions") && (
           <DataTableFacetedFilter
             column={table.getColumn("positions")}
-            title="Position"
+            title={t('table.position')}
             options={positions}
           />
         )}
@@ -80,7 +82,7 @@ export function DataTableToolbar<TData>({
         {table.getColumn("current_league") && (
           <DataTableFacetedFilter
             column={table.getColumn("current_league")}
-            title="League"
+            title={t('table.league')}
             options={leagues}
           />
         )}
@@ -107,7 +109,7 @@ export function DataTableToolbar<TData>({
             onClick={() => table.resetColumnFilters()}
             className="h-8 px-2 lg:px-3"
           >
-            Reset
+            {t('table.reset')}
             <Cross className="ml-2 h-4 w-4" />
           </Button>
         )}

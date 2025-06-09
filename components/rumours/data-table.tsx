@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/table";
 import { DataTablePagination } from "@/components/rumours/data-table-pagination";
 import { DataTableToolbar } from "@/components/rumours/data-table-toolbar";
+import { useI18n } from "@/lib/i18n/context";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -34,6 +35,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const { t } = useI18n();
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: "created_at", desc: true }, // Default sort by latest
   ]);
@@ -109,7 +111,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No transfer rumours found.
+                  {t('table.noRumoursFound')}
                 </TableCell>
               </TableRow>
             )}
