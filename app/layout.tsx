@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Edu_AU_VIC_WA_NT_Hand } from "next/font/google";
 import "./globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
@@ -18,15 +18,23 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const eduAU = Edu_AU_VIC_WA_NT_Hand({
+  variable: "--font-edu-au",
+  subsets: ["latin"],
+  weight: "400",
+});
+
 export const metadata: Metadata = {
   title: "Voice of Eagle",
-  description: "Voice of Eagle - Your source for the latest rumors, lineup updates, and insights",
+  description:
+    "Voice of Eagle - Your source for the latest rumors, lineup updates, and insights",
   keywords: ["voice of eagle", "rumors", "lineup", "news", "updates"],
   authors: [{ name: "Hasan Harman", url: "https://x.com/strad3r" }],
   creator: "Hasan Harman",
   openGraph: {
     title: "Voice of Eagle",
-    description: "Voice of Eagle - Your source for the latest rumors, lineup updates, and insights",
+    description:
+      "Voice of Eagle - Your source for the latest rumors, lineup updates, and insights",
     url: "https://voice-of-eagle.vercel.app",
     siteName: "Voice of Eagle",
     images: [
@@ -43,7 +51,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Voice of Eagle",
-    description: "Voice of Eagle - Your source for the latest rumors, lineup updates, and insights",
+    description:
+      "Voice of Eagle - Your source for the latest rumors, lineup updates, and insights",
     creator: "@strad3r",
     images: ["/og-image.png"],
   },
@@ -68,13 +77,15 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${eduAU.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <I18nProvider>
             <AuthProvider>
               <Navbar />
-              <main className="h-[calc(100vh-68px)] bg-background">{children}</main>
+              <main className="h-[calc(100vh-68px)] bg-background">
+                {children}
+              </main>
               <Toaster />
             </AuthProvider>
           </I18nProvider>

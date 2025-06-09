@@ -1,35 +1,35 @@
-"use client"
+"use client";
 
-import AddRumourButton from "@/components/navbar-components/add-rumour-button"
-import Logo from "@/components/navbar-components/logo"
-import NotificationMenu from "@/components/navbar-components/notification-menu"
-import UserMenu from "@/components/navbar-components/user-menu"
-import ThemeSwitcher from "@/components/navbar-components/theme-switcher"
-import SocialButtons from "@/components/navbar-components/social-buttons"
-import LanguageSwitcher from "@/components/navbar-components/language-switcher"
-import { Button } from "@/components/ui/button"
+import AddRumourButton from "@/components/navbar-components/add-rumour-button";
+import Logo from "@/components/navbar-components/logo";
+import NotificationMenu from "@/components/navbar-components/notification-menu";
+import UserMenu from "@/components/navbar-components/user-menu";
+import ThemeSwitcher from "@/components/navbar-components/theme-switcher";
+import SocialButtons from "@/components/navbar-components/social-buttons";
+import LanguageSwitcher from "@/components/navbar-components/language-switcher";
+import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-} from "@/components/ui/navigation-menu"
+} from "@/components/ui/navigation-menu";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import Link from "next/link"
-import { useI18n } from "@/lib/i18n/context"
+} from "@/components/ui/popover";
+import Link from "next/link";
+import { useI18n } from "@/lib/i18n/context";
 
 export default function Component() {
-  const { t } = useI18n()
+  const { t } = useI18n();
 
   const navigationLinks = [
-    { href: "/rumours", label: t('nav.rumours') },
-    { href: "/lineup", label: t('nav.lineup') },
-    { href: "/purpose", label: t('nav.purpose') },
-  ]
+    { href: "/readme", label: t("nav.readme") },
+    { href: "/rumours", label: t("nav.rumours") },
+    { href: "/lineup", label: t("nav.lineup") },
+  ];
 
   return (
     <header className="border-b px-4 md:px-6">
@@ -77,9 +77,7 @@ export default function Component() {
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index} className="w-full">
                       <NavigationMenuLink asChild className="py-1.5">
-                        <Link href={link.href}>
-                          {link.label}
-                        </Link>
+                        <Link href={link.href}>{link.label}</Link>
                       </NavigationMenuLink>
                     </NavigationMenuItem>
                   ))}
@@ -89,7 +87,7 @@ export default function Component() {
           </Popover>
           {/* Main nav */}
           <div className="flex items-center gap-6">
-            <a href="#" className="text-primary hover:text-primary/90">
+            <a href="#" className="text-primary hover:text-primary/90 ">
               <Logo />
             </a>
             {/* Navigation menu */}
@@ -101,9 +99,7 @@ export default function Component() {
                       asChild
                       className="text-muted-foreground hover:text-primary py-1.5 font-medium"
                     >
-                      <Link href={link.href}>
-                        {link.label}
-                      </Link>
+                      <Link href={link.href}>{link.label}</Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                 ))}
@@ -130,5 +126,5 @@ export default function Component() {
         </div>
       </div>
     </header>
-  )
+  );
 }
