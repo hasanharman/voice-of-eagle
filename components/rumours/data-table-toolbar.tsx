@@ -21,17 +21,22 @@ export function DataTableToolbar<TData>({
 
   // Filter options
   const positions = [
-    { label: "Striker", value: "ST" },
-    { label: "Center Forward", value: "CF" },
-    { label: "Left Wing", value: "LW" },
-    { label: "Right Wing", value: "RW" },
-    { label: "Attacking Midfielder", value: "CAM" },
-    { label: "Central Midfielder", value: "CM" },
-    { label: "Defensive Midfielder", value: "CDM" },
+    { label: "Goalkeeper", value: "GK" },
+    { label: "Center Back", value: "CB" },
     { label: "Left Back", value: "LB" },
     { label: "Right Back", value: "RB" },
-    { label: "Center Back", value: "CB" },
-    { label: "Goalkeeper", value: "GK" },
+    { label: "Left Wing Back", value: "LWB" },
+    { label: "Right Wing Back", value: "RWB" },
+    { label: "Defensive Midfielder", value: "CDM" },
+    { label: "Central Midfielder", value: "CM" },
+    { label: "Attacking Midfielder", value: "CAM" },
+    { label: "Left Midfielder", value: "LM" },
+    { label: "Right Midfielder", value: "RM" },
+    { label: "Left Wing", value: "LW" },
+    { label: "Right Wing", value: "RW" },
+    { label: "Center Forward", value: "CF" },
+    { label: "Striker", value: "ST" },
+    { label: "Second Striker", value: "SS" },
   ];
 
   const leagues = [
@@ -61,7 +66,7 @@ export function DataTableToolbar<TData>({
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder={t('table.filterPlayers')}
+          placeholder={t("table.filterPlayers")}
           value={
             (table.getColumn("player_name")?.getFilterValue() as string) ?? ""
           }
@@ -74,16 +79,8 @@ export function DataTableToolbar<TData>({
         {table.getColumn("positions") && (
           <DataTableFacetedFilter
             column={table.getColumn("positions")}
-            title={t('table.position')}
+            title={t("table.position")}
             options={positions}
-          />
-        )}
-
-        {table.getColumn("current_league") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("current_league")}
-            title={t('table.league')}
-            options={leagues}
           />
         )}
 
@@ -109,7 +106,7 @@ export function DataTableToolbar<TData>({
             onClick={() => table.resetColumnFilters()}
             className="h-8 px-2 lg:px-3"
           >
-            {t('table.reset')}
+            {t("table.reset")}
             <Cross className="ml-2 h-4 w-4" />
           </Button>
         )}

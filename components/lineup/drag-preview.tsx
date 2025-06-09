@@ -18,8 +18,7 @@ const DragPreview = memo(function DragPreview({
   playerName,
 }: DragPreviewProps) {
   const isOutOfBounds = detectedPosition === "OUT";
-  const isOccupied = detectedPosition === "OCCUPIED";
-  const isInvalid = isOutOfBounds || isOccupied;
+  const isInvalid = isOutOfBounds;
 
   const confidenceColor = isInvalid
     ? "#EF4444"
@@ -31,13 +30,11 @@ const DragPreview = memo(function DragPreview({
 
   const getDisplayText = () => {
     if (isOutOfBounds) return "OUT OF BOUNDS";
-    if (isOccupied) return "OCCUPIED";
     return detectedPosition;
   };
 
   const getIcon = () => {
     if (isOutOfBounds) return "⚠️";
-    if (isOccupied) return "🚫";
     return `${(confidence * 100).toFixed(0)}%`;
   };
 
@@ -101,31 +98,21 @@ const DragPreview = memo(function DragPreview({
           <motion.div
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-500"
             animate={{
-              rotate: isOccupied ? [0, 0] : [0, 10, -10, 0],
-              scale: isOccupied ? [1, 1.2, 1] : [1, 1.1, 1],
+              rotate: [0, 10, -10, 0],
+              scale: [1, 1.1, 1],
             }}
             transition={{
               duration: 0.5,
               repeat: Infinity,
             }}
           >
-            {isOccupied ? (
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            ) : (
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            )}
+            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fillRule="evenodd"
+                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                clipRule="evenodd"
+              />
+            </svg>
           </motion.div>
         )}
       </motion.div>

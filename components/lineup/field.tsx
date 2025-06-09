@@ -13,6 +13,7 @@ import {
   throttle,
   isWithinFieldBounds,
 } from "@/lib/store/player.store";
+import { getAreaBasedPosition } from "@/lib/utils/besiktas-import";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n/context";
 
@@ -55,24 +56,6 @@ export default function FootballField({
     [selectedFormation]
   );
 
-  // Function to check if a position is occupied by another player
-  const isPositionOccupied = useCallback(
-    (x: number, y: number, excludePlayerId: string) => {
-      const threshold = 15; // Distance threshold for collision detection
-
-      return lineupPlayers.some((player) => {
-        if (player.positionId === excludePlayerId) return false; // Exclude the dragged player
-
-        const distance = Math.sqrt(
-          Math.pow(player.fieldPosition.x - x, 2) +
-            Math.pow(player.fieldPosition.y - y, 2)
-        );
-
-        return distance < threshold;
-      });
-    },
-    [lineupPlayers]
-  );
 
   const handleDragStart = useCallback(
     (positionId: string) => {
@@ -102,22 +85,13 @@ export default function FootballField({
           constrainedPosition.y
         );
         const isOutOfBounds = !isWithinFieldBounds(x, y);
-        const isOccupied =
-          !isOutOfBounds &&
-          isPositionOccupied(
-            constrainedPosition.x,
-            constrainedPosition.y,
-            positionId
-          );
 
-        let previewStatus = "VALID";
+        let previewStatus: "VALID" | "OUT" = "VALID";
         let previewPosition = constrainedPosition;
 
         if (isOutOfBounds) {
           previewStatus = "OUT";
           previewPosition = { x, y };
-        } else if (isOccupied) {
-          previewStatus = "OCCUPIED";
         }
 
         // Update drag preview with status
@@ -128,7 +102,7 @@ export default function FootballField({
           confidence: previewStatus === "VALID" ? detection.confidence : 0,
         });
       }, 16), // ~60fps throttling
-    [draggedPlayer, setDragPreview, isPositionOccupied]
+    [draggedPlayer, setDragPreview]
   );
 
   const handleDrag = useCallback(
@@ -171,39 +145,10 @@ export default function FootballField({
         return;
       }
 
-      // Check if the drop position is within bounds
-      if (!isWithinFieldBounds(x, y)) {
-        console.log(`❌ Drop position outside field bounds - Snapping back`);
-        updatePlayerPosition(positionId, originalPosition);
-        setDragOperation({
-          type: null,
-          details:
-            "⚠️ Oyuncu eski konumuna döndü - saha sınırları dışına bırakılamaz",
-        });
-        toast.error(t('lineup.playerReturnedToPosition'));
-        resetDragState();
-        return;
-      }
-
       const constrainedPosition = constrainToField(x, y);
-
-      // Check if position is occupied by another player
-      if (
-        isPositionOccupied(
-          constrainedPosition.x,
-          constrainedPosition.y,
-          positionId
-        )
-      ) {
-        console.log(`❌ Position occupied by another player - Snapping back`);
-        updatePlayerPosition(positionId, originalPosition);
-        setDragOperation({
-          type: null,
-          details:
-            "⚠️ Oyuncu eski konumuna döndü - pozisyon başka oyuncu tarafından dolu",
-        });
-        resetDragState();
-        return;
+      
+      if (!isWithinFieldBounds(x, y)) {
+        console.log(`📍 Position constrained to field bounds: (${x.toFixed(1)}, ${y.toFixed(1)}) -> (${constrainedPosition.x.toFixed(1)}, ${constrainedPosition.y.toFixed(1)})`);
       }
 
       // Valid drop - update position
@@ -232,7 +177,6 @@ export default function FootballField({
       updatePlayerPositionWithDetection,
       updatePlayerPosition,
       originalPosition,
-      isPositionOccupied,
       removePlayerFromField,
     ]
   );

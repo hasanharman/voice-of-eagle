@@ -1,12 +1,16 @@
 // lib/store/player.store.ts
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+import {
+  importBesiktasPlayers,
+  type BesiktasData,
+} from "@/lib/utils/besiktas-import";
+import besiktasData from "../../public/besiktas-data.json";
 
 export interface Player {
   id: string;
   name: string;
   position: string;
-  rating: number;
   image: string;
   nationality: string;
   club: string;
@@ -135,16 +139,16 @@ export const isWithinFieldBounds = (x: number, y: number): boolean => {
 export const formations = {
   "4-3-3": [
     { id: "gk", position: { x: 50, y: 85 }, defaultPosition: "GK" },
-    { id: "lb", position: { x: 20, y: 65 }, defaultPosition: "LB" },
-    { id: "cb1", position: { x: 40, y: 65 }, defaultPosition: "CB" },
-    { id: "cb2", position: { x: 60, y: 65 }, defaultPosition: "CB" },
-    { id: "rb", position: { x: 80, y: 65 }, defaultPosition: "RB" },
+    { id: "lb", position: { x: 15, y: 65 }, defaultPosition: "LB" },
+    { id: "cb1", position: { x: 35, y: 65 }, defaultPosition: "CB" },
+    { id: "cb2", position: { x: 65, y: 65 }, defaultPosition: "CB" },
+    { id: "rb", position: { x: 85, y: 65 }, defaultPosition: "RB" },
     { id: "cm1", position: { x: 30, y: 45 }, defaultPosition: "CM" },
-    { id: "cm2", position: { x: 50, y: 45 }, defaultPosition: "CM" },
-    { id: "cm3", position: { x: 70, y: 45 }, defaultPosition: "CM" },
-    { id: "lw", position: { x: 25, y: 20 }, defaultPosition: "LW" },
+    { id: "cam", position: { x: 50, y: 35 }, defaultPosition: "CAM" },
+    { id: "cm2", position: { x: 70, y: 45 }, defaultPosition: "CM" },
+    { id: "lw", position: { x: 15, y: 20 }, defaultPosition: "LW" },
     { id: "st", position: { x: 50, y: 15 }, defaultPosition: "ST" },
-    { id: "rw", position: { x: 75, y: 20 }, defaultPosition: "RW" },
+    { id: "rw", position: { x: 85, y: 20 }, defaultPosition: "RW" },
   ],
   "4-2-3-1": [
     { id: "gk", position: { x: 50, y: 85 }, defaultPosition: "GK" },
@@ -180,27 +184,24 @@ export const mockPlayers: Player[] = [
     id: "1",
     name: "Mert Günok",
     position: "GK",
-    rating: 77,
     image:
       "https://img.a.transfermarkt.technology/portrait/header/51894-1727355668.png",
     nationality: "Turkey",
     club: "Beşiktaş",
   },
   {
-    id: "2",
-    name: "Jonas Svensson",
-    position: "RB",
-    rating: 72,
+    id: "5",
+    name: "Arthur Masuaku",
+    position: "LB",
     image:
-      "https://img.a.transfermarkt.technology/portrait/header/136184-1727356799.png",
-    nationality: "Turkey",
+      "https://img.a.transfermarkt.technology/portrait/header/181380-1696075631.png",
+    nationality: "Brazil",
     club: "Beşiktaş",
   },
   {
     id: "3",
     name: "Gabriel Paulista",
     position: "CB",
-    rating: 88,
     image:
       "https://img.a.transfermarkt.technology/portrait/header/149498-1727355000.png",
     nationality: "Portugal",
@@ -210,88 +211,82 @@ export const mockPlayers: Player[] = [
     id: "4",
     name: "Felix Uduokhai",
     position: "CB",
-    rating: 86,
     image:
       "https://img.a.transfermarkt.technology/portrait/header/278343-1727357502.png",
     nationality: "Brazil",
     club: "Beşiktaş",
   },
   {
-    id: "5",
-    name: "Arthur Masuaku",
-    position: "LB",
-    rating: 84,
+    id: "2",
+    name: "Jonas Svensson",
+    position: "RB",
     image:
-      "https://img.a.transfermarkt.technology/portrait/header/181380-1696075631.png",
-    nationality: "Brazil",
+      "https://img.a.transfermarkt.technology/portrait/header/136184-1727356799.png",
+    nationality: "Turkey",
     club: "Beşiktaş",
   },
   {
     id: "6",
     name: "Gedson Fernandes",
     position: "CM",
-    rating: 83,
     image:
       "https://img.a.transfermarkt.technology/portrait/header/337800-1727354898.png",
     nationality: "Turkey",
     club: "Beşiktaş",
   },
   {
-    id: "7",
-    name: "Alex Oxlade-Chamberlain",
-    position: "CDM",
-    rating: 85,
-    image:
-      "https://img.a.transfermarkt.technology/portrait/header/143424-1727356614.png",
-    nationality: "Canada",
-    club: "Beşiktaş",
-  },
-  {
-    id: "8",
-    name: "Kenny Arroyo",
-    position: "LW",
-    rating: 87,
-    image:
-      "https://img.a.transfermarkt.technology/portrait/header/1074584-1739177410.jpeg",
-    nationality: "Portugal",
-    club: "Beşiktaş",
-  },
-  {
-    id: "9",
-    name: "Milot Rashica",
-    position: "RM",
-    rating: 77,
-    image:
-      "https://img.a.transfermarkt.technology/portrait/header/291739-1727356752.png",
-    nationality: "Kosova",
-    club: "Beşiktaş",
-  },
-  {
     id: "10",
     name: "Rafa Silva",
     position: "RW",
-    rating: 86,
     image:
       "https://img.a.transfermarkt.technology/portrait/header/238055-1727356372.png",
     nationality: "Portugal",
     club: "Beşiktaş",
   },
   {
+    id: "7",
+    name: "Alex Oxlade-Chamberlain",
+    position: "CDM",
+    image:
+      "https://img.a.transfermarkt.technology/portrait/header/143424-1727356614.png",
+    nationality: "Canada",
+    club: "Beşiktaş",
+  },
+
+  {
+    id: "8",
+    name: "Kenny Arroyo",
+    position: "LW",
+    image:
+      "https://img.a.transfermarkt.technology/portrait/header/1074584-1739177410.jpeg",
+    nationality: "Portugal",
+    club: "Beşiktaş",
+  },
+
+  {
     id: "11",
     name: "Ciro Immobile",
     position: "ST",
-    rating: 89,
     image:
       "https://img.a.transfermarkt.technology/portrait/header/105521-1727355739.png",
     nationality: "Uruguay",
     club: "Beşiktaş",
   },
+  {
+    id: "9",
+    name: "Milot Rashica",
+    position: "RM",
+    image:
+      "https://img.a.transfermarkt.technology/portrait/header/291739-1727356752.png",
+    nationality: "Kosova",
+    club: "Beşiktaş",
+  },
+
   // Substitutes
   {
     id: "12",
     name: "Ersin Destanoğlu",
     position: "GK",
-    rating: 79,
     image:
       "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=100&h=100&fit=crop&crop=face",
     nationality: "Turkey",
@@ -301,7 +296,6 @@ export const mockPlayers: Player[] = [
     id: "13",
     name: "Necip Uysal",
     position: "CM",
-    rating: 80,
     image:
       "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=100&h=100&fit=crop&crop=face",
     nationality: "Turkey",
@@ -311,7 +305,6 @@ export const mockPlayers: Player[] = [
     id: "14",
     name: "Cenk Tosun",
     position: "ST",
-    rating: 82,
     image:
       "https://images.unsplash.com/photo-1552058544-f2b08422138a?w=100&h=100&fit=crop&crop=face",
     nationality: "Turkey",
@@ -321,7 +314,6 @@ export const mockPlayers: Player[] = [
     id: "15",
     name: "Salih Uçan",
     position: "CDM",
-    rating: 75,
     image:
       "https://images.unsplash.com/photo-1566753323558-f4e0952af115?w=100&h=100&fit=crop&crop=face",
     nationality: "Turkey",
@@ -331,7 +323,6 @@ export const mockPlayers: Player[] = [
     id: "16",
     name: "Tayyip Talha Sanuç",
     position: "CB",
-    rating: 73,
     image:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face",
     nationality: "Turkey",
@@ -341,7 +332,6 @@ export const mockPlayers: Player[] = [
     id: "17",
     name: "Onur Bulut",
     position: "RB",
-    rating: 71,
     image:
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
     nationality: "Turkey",
@@ -351,7 +341,6 @@ export const mockPlayers: Player[] = [
     id: "18",
     name: "Mustafa Hekimoğlu",
     position: "LW",
-    rating: 69,
     image:
       "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
     nationality: "Turkey",
@@ -420,13 +409,142 @@ interface PlayerState {
   getAvailablePlayersForPosition: (position: string) => Player[];
   isPlayerInLineup: (playerId: string) => boolean;
   isPlayerInSubstitutes: (playerId: string) => boolean;
+  getTargetPositionForSlot: (positionId: string) => string;
 }
 
 export const usePlayerStore = create<PlayerState>()(
   devtools(
     (set, get) => ({
-      availablePlayers: mockPlayers,
-      lineupPlayers: [],
+      availablePlayers: importBesiktasPlayers(
+        besiktasData as BesiktasData
+      ).filter(
+        (player) =>
+          ![
+            "mert-gunok",
+            "arthur-masuaku",
+            "gabriel-paulista",
+            "felix-uduokhai",
+            "jonas-svensson",
+            "gedson-fernandes",
+            "alex-oxlade-chamberlain",
+            "rafa-silva",
+            "ernest-muci",
+            "ciro-immobile",
+            "milot-rashica",
+          ].includes(player.id)
+      ),
+      lineupPlayers: [
+        {
+          id: "mert-gunok",
+          name: "Mert Günok",
+          position: "GK",
+          image: "/api/placeholder/150/150",
+          nationality: "Turkey",
+          club: "Beşiktaş",
+          positionId: "gk",
+          fieldPosition: { x: 50, y: 85 },
+        },
+        {
+          id: "arthur-masuaku",
+          name: "Arthur Masuaku",
+          position: "LB",
+          image: "/api/placeholder/150/150",
+          nationality: "France",
+          club: "Beşiktaş",
+          positionId: "lb",
+          fieldPosition: { x: 85, y: 65 },
+        },
+        {
+          id: "gabriel-paulista",
+          name: "Gabriel Paulista",
+          position: "CB",
+          image: "/api/placeholder/150/150",
+          nationality: "Brazil",
+          club: "Beşiktaş",
+          positionId: "cb1",
+          fieldPosition: { x: 35, y: 65 },
+        },
+        {
+          id: "felix-uduokhai",
+          name: "Felix Uduokhai",
+          position: "CB",
+          image: "/api/placeholder/150/150",
+          nationality: "Germany",
+          club: "Beşiktaş",
+          positionId: "cb2",
+          fieldPosition: { x: 65, y: 65 },
+        },
+        {
+          id: "jonas-svensson",
+          name: "Jonas Svensson",
+          position: "RB",
+          image: "/api/placeholder/150/150",
+          nationality: "Norway",
+          club: "Beşiktaş",
+          positionId: "rb",
+          fieldPosition: { x: 15, y: 65 },
+        },
+        {
+          id: "gedson-fernandes",
+          name: "Gedson Fernandes",
+          position: "CM",
+          image: "/api/placeholder/150/150",
+          nationality: "Portugal",
+          club: "Beşiktaş",
+          positionId: "cm1",
+          fieldPosition: { x: 30, y: 45 },
+        },
+        {
+          id: "alex-oxlade-chamberlain-2",
+          name: "Alex Oxlade-Chamberlain",
+          position: "CM",
+          image: "/api/placeholder/150/150",
+          nationality: "England",
+          club: "Beşiktaş",
+          positionId: "cm2",
+          fieldPosition: { x: 70, y: 45 },
+        },
+        {
+          id: "rafa-silva",
+          name: "Rafa Silva",
+          position: "CAM",
+          image: "/api/placeholder/150/150",
+          nationality: "Portugal",
+          club: "Beşiktaş",
+          positionId: "cam",
+          fieldPosition: { x: 50, y: 35 },
+        },
+        {
+          id: "ernest-muci",
+          name: "Ernest Muci",
+          position: "LW",
+          image: "/api/placeholder/150/150",
+          nationality: "Albania",
+          club: "Beşiktaş",
+          positionId: "lw",
+          fieldPosition: { x: 15, y: 20 },
+        },
+        {
+          id: "ciro-immobile",
+          name: "Ciro Immobile",
+          position: "ST",
+          image: "/api/placeholder/150/150",
+          nationality: "Italy",
+          club: "Beşiktaş",
+          positionId: "st",
+          fieldPosition: { x: 50, y: 15 },
+        },
+        {
+          id: "milot-rashica",
+          name: "Milot Rashica",
+          position: "RW",
+          image: "/api/placeholder/150/150",
+          nationality: "Kosovo",
+          club: "Beşiktaş",
+          positionId: "rw",
+          fieldPosition: { x: 85, y: 20 },
+        },
+      ],
       substituteePlayers: [],
       selectedFormation: "4-3-3",
       draggedPlayer: null,
@@ -795,6 +913,14 @@ export const usePlayerStore = create<PlayerState>()(
 
       isPlayerInSubstitutes: (playerId) => {
         return get().substituteePlayers.some((p) => p.id === playerId);
+      },
+
+      getTargetPositionForSlot: (positionId) => {
+        const { selectedFormation } = get();
+        const formationPos = formations[selectedFormation].find(
+          (p) => p.id === positionId
+        );
+        return formationPos?.defaultPosition || "CM";
       },
     }),
     {
