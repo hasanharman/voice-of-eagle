@@ -145,21 +145,11 @@ export default function FootballField({
         return;
       }
 
-      // Check if the drop position is within bounds
-      if (!isWithinFieldBounds(x, y)) {
-        console.log(`❌ Drop position outside field bounds - Snapping back`);
-        updatePlayerPosition(positionId, originalPosition);
-        setDragOperation({
-          type: null,
-          details:
-            "⚠️ Oyuncu eski konumuna döndü - saha sınırları dışına bırakılamaz",
-        });
-        toast.error(t('lineup.playerReturnedToPosition'));
-        resetDragState();
-        return;
-      }
-
       const constrainedPosition = constrainToField(x, y);
+      
+      if (!isWithinFieldBounds(x, y)) {
+        console.log(`📍 Position constrained to field bounds: (${x.toFixed(1)}, ${y.toFixed(1)}) -> (${constrainedPosition.x.toFixed(1)}, ${constrainedPosition.y.toFixed(1)})`);
+      }
 
       // Valid drop - update position
       const detection = detectPosition(
