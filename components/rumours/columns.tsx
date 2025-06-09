@@ -236,49 +236,53 @@ export const createColumns = (
       },
       enableSorting: false,
     },
-    // {
-    //   id: "actions",
-    //   header: t("table.actions"),
-    //   cell: ({ row }) => {
-    //     const rumour = row.original;
+    {
+      id: "actions",
+      header: t("table.actions"),
+      cell: ({ row }) => {
+        const rumour = row.original;
 
-    //     return (
-    //       <DropdownMenu>
-    //         <DropdownMenuTrigger asChild>
-    //           <Button variant="ghost" className="h-8 w-8 p-0">
-    //             <span className="sr-only">Open menu</span>
-    //             <MoreHorizontal className="h-4 w-4" />
-    //           </Button>
-    //         </DropdownMenuTrigger>
-    //         <DropdownMenuContent align="end">
-    //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-    //           <DropdownMenuItem
-    //             onClick={() => navigator.clipboard.writeText(rumour.id)}
-    //           >
-    //             Copy rumour ID
-    //           </DropdownMenuItem>
-    //           <DropdownMenuSeparator />
-    //           {rumour.transfermarkt_url && (
-    //             <DropdownMenuItem asChild>
-    //               <a
-    //                 href={rumour.transfermarkt_url}
-    //                 target="_blank"
-    //                 rel="noopener noreferrer"
-    //               >
-    //                 View on Transfermarkt
-    //               </a>
-    //             </DropdownMenuItem>
-    //           )}
-    //           <DropdownMenuItem>Edit rumour</DropdownMenuItem>
-    //           <DropdownMenuItem className="text-red-600">
-    //             Delete rumour
-    //           </DropdownMenuItem>
-    //         </DropdownMenuContent>
-    //       </DropdownMenu>
-    //     );
-    //   },
-    //   enableSorting: false,
-    //   enableHiding: false,
-    // },
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(rumour.id)}
+              >
+                Copy rumour ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              {rumour.transfermarkt_url && (
+                <DropdownMenuItem asChild>
+                  <a
+                    href={rumour.transfermarkt_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View on Transfermarkt
+                  </a>
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem asChild>
+                <a href={`/rumours/edit/${rumour.id}`}>
+                  Edit rumour
+                </a>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-red-600">
+                Delete rumour
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+      enableSorting: false,
+      enableHiding: false,
+    },
   ];
 };
