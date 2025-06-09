@@ -29,7 +29,7 @@ export default function SocialButtons() {
         asChild
       >
         <a
-          href="https://x.com/strd3r"
+          href="https://x.com/strad3r"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="X (Twitter)"

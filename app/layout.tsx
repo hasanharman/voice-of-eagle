@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title: "Voice of Eagle",
   description: "Voice of Eagle - Your source for the latest rumors, lineup updates, and insights",
   keywords: ["voice of eagle", "rumors", "lineup", "news", "updates"],
-  authors: [{ name: "Hasan Harman", url: "https://x.com/strd3r" }],
+  authors: [{ name: "Hasan Harman", url: "https://x.com/strad3r" }],
   creator: "Hasan Harman",
   openGraph: {
     title: "Voice of Eagle",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Voice of Eagle",
     description: "Voice of Eagle - Your source for the latest rumors, lineup updates, and insights",
-    creator: "@strd3r",
+    creator: "@strad3r",
     images: ["/og-image.png"],
   },
   robots: {

@@ -36,7 +36,7 @@ export default function AddRumourButton() {
           asChild
         >
           <a
-            href="https://x.com/messages/compose?recipient_id=strd3r"
+            href="https://x.com/messages/compose?recipient_id=strad3r"
             target="_blank"
             rel="noopener noreferrer"
           >

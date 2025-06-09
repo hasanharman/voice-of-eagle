@@ -87,7 +87,7 @@ export const translations = {
       enterPhotoUrl: 'Fotoğraf URL girin',
       addPosition: 'Pozisyon ekle (örn. ST, CM, CB)',
       noPermission: 'Söylenti ekleme izniniz yok. Sadece yöneticiler yeni söylenti ekleyebilir.',
-      addRumourGuide: 'Söylenti eklemek için X\'te @strd3r\'a DM gönderin'
+      addRumourGuide: 'Söylenti eklemek için X\'te @strad3r\'a DM gönderin'
     },
     auth: {
       signUpToVote: 'Oy vermek için kaydol',
@@ -212,7 +212,7 @@ export const translations = {
       enterPhotoUrl: 'Enter photo URL',
       addPosition: 'Add position (e.g., ST, CM, CB)',
       noPermission: 'You don\'t have permission to add rumours. Only admins can add new rumours.',
-      addRumourGuide: 'To add a rumour, send a DM to @strd3r on X'
+      addRumourGuide: 'To add a rumour, send a DM to @strad3r on X'
     },
     auth: {
       signUpToVote: 'Sign up to vote',
