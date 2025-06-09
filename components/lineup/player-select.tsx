@@ -78,7 +78,7 @@ export default function PlayerSelectionResponsive({
         }
       )
       .sort((a, b) => b.rating - a.rating);
-  }, [availablePlayers, searchTerm, positionId, getTargetPositionForSlot]);
+  }, [availablePlayers, searchTerm, positionId, getTargetPositionForSlot, isPlayerInLineup]);
 
   const handlePlayerSelect = (player: Player) => {
     if (positionId) {
