@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/popover"
 import { useI18n } from "@/lib/i18n/context"
 import { useNotificationStore } from "@/lib/store/notification.store"
+import { useAuth } from "@/hooks/useAuth"
+import { getRelativeTime } from "@/lib/utils/time"
 
 const initialNotifications = [
   {
@@ -84,6 +86,7 @@ function Dot({ className }: { className?: string }) {
 
 export default function NotificationMenu() {
   const { t } = useI18n()
+  const { isAdmin } = useAuth()
   const { notifications, addNotification, markAsRead, markAllAsRead } = useNotificationStore()
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [newNotification, setNewNotification] = useState({
@@ -100,7 +103,7 @@ export default function NotificationMenu() {
         user: newNotification.user,
         action: newNotification.action,
         target: newNotification.target,
-        timestamp: new Date().toLocaleString(),
+        timestamp: new Date().toISOString(),
         unread: true,
       })
       setNewNotification({ user: "", action: "", target: "" })
@@ -132,12 +135,14 @@ export default function NotificationMenu() {
             <div className="flex items-baseline justify-between gap-4 px-3 py-2">
               <div className="text-sm font-semibold">{t('nav.notifications')}</div>
               <div className="flex gap-2">
-                <DialogTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-xs">
-                    <Plus className="h-3 w-3 mr-1" />
-                    Add
-                  </Button>
-                </DialogTrigger>
+                {isAdmin && (
+                  <DialogTrigger asChild>
+                    <Button variant="ghost" size="sm" className="text-xs">
+                      <Plus className="h-3 w-3 mr-1" />
+                      Add
+                    </Button>
+                  </DialogTrigger>
+                )}
                 {unreadCount > 0 && (
                   <button
                     className="text-xs font-medium hover:underline"
@@ -177,7 +182,7 @@ export default function NotificationMenu() {
                         .
                       </div>
                       <div className="text-muted-foreground text-xs">
-                        {notification.timestamp}
+                        {getRelativeTime(notification.timestamp)}
                       </div>
                     </div>
                     {notification.unread && (

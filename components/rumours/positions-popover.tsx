@@ -25,7 +25,7 @@ export function PositionsPopover({ positions }: PositionsPopoverProps) {
   if (additionalPositions.length === 0) {
     return (
       <Badge variant="secondary" className="text-xs">
-        {firstPosition}
+        {t(`positions.${firstPosition}`)}
       </Badge>
     );
   }
@@ -33,7 +33,7 @@ export function PositionsPopover({ positions }: PositionsPopoverProps) {
   return (
     <div className="flex items-center gap-1">
       <Badge variant="secondary" className="text-xs">
-        {firstPosition}
+        {t(`positions.${firstPosition}`)}
       </Badge>
       <Popover>
         <PopoverTrigger asChild>
@@ -47,7 +47,7 @@ export function PositionsPopover({ positions }: PositionsPopoverProps) {
             <div className="flex flex-wrap gap-1">
               {additionalPositions.map((position) => (
                 <Badge key={position} variant="secondary" className="text-xs">
-                  {position}
+                  {t(`positions.${position}`)}
                 </Badge>
               ))}
             </div>

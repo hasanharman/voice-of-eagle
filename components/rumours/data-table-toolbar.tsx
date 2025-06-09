@@ -21,22 +21,22 @@ export function DataTableToolbar<TData>({
 
   // Filter options
   const positions = [
-    { label: "Goalkeeper", value: "GK" },
-    { label: "Center Back", value: "CB" },
-    { label: "Left Back", value: "LB" },
-    { label: "Right Back", value: "RB" },
-    { label: "Left Wing Back", value: "LWB" },
-    { label: "Right Wing Back", value: "RWB" },
-    { label: "Defensive Midfielder", value: "CDM" },
-    { label: "Central Midfielder", value: "CM" },
-    { label: "Attacking Midfielder", value: "CAM" },
-    { label: "Left Midfielder", value: "LM" },
-    { label: "Right Midfielder", value: "RM" },
-    { label: "Left Wing", value: "LW" },
-    { label: "Right Wing", value: "RW" },
-    { label: "Center Forward", value: "CF" },
-    { label: "Striker", value: "ST" },
-    { label: "Second Striker", value: "SS" },
+    { label: t("positions.GK"), value: "GK" },
+    { label: t("positions.CB"), value: "CB" },
+    { label: t("positions.LB"), value: "LB" },
+    { label: t("positions.RB"), value: "RB" },
+    { label: t("positions.LWB"), value: "LWB" },
+    { label: t("positions.RWB"), value: "RWB" },
+    { label: t("positions.CDM"), value: "CDM" },
+    { label: t("positions.CM"), value: "CM" },
+    { label: t("positions.CAM"), value: "CAM" },
+    { label: t("positions.LM"), value: "LM" },
+    { label: t("positions.RM"), value: "RM" },
+    { label: t("positions.LW"), value: "LW" },
+    { label: t("positions.RW"), value: "RW" },
+    { label: t("positions.CF"), value: "CF" },
+    { label: t("positions.ST"), value: "ST" },
+    { label: t("positions.SS"), value: "SS" },
   ];
 
   const leagues = [
