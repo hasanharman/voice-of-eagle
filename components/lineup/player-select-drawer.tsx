@@ -49,7 +49,7 @@ export default function PlayerSelectionDrawer({
           player.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
           player.nationality.toLowerCase().includes(searchTerm.toLowerCase())
       )
-      .sort((a, b) => b.rating - a.rating); // Sort by rating descending
+      .sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
   }, [availablePlayers, searchTerm]);
 
   const handlePlayerSelect = (player: Player) => {
@@ -117,9 +117,6 @@ export default function PlayerSelectionDrawer({
                       <Badge variant="secondary" className="text-xs">
                         {currentPlayer.position}
                       </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        {currentPlayer.rating}
-                      </Badge>
                       <span className="text-xs text-muted-foreground">
                         {currentPlayer.nationality}
                       </span>
@@ -171,19 +168,7 @@ export default function PlayerSelectionDrawer({
                         <h3 className="font-medium text-sm text-foreground">
                           {player.name}
                         </h3>
-                        <div className="flex items-center gap-2">
-                          {player.rating >= 85 && (
-                            <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                          )}
-                          <Badge
-                            variant={
-                              player.rating >= 85 ? "default" : "secondary"
-                            }
-                            className="text-xs"
-                          >
-                            {player.rating}
-                          </Badge>
-                        </div>
+
                       </div>
                       <div className="flex items-center gap-2 mt-1">
                         <Badge variant="outline" className="text-xs">

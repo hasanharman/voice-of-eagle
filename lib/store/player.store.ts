@@ -8,7 +8,6 @@ export interface Player {
   id: string;
   name: string;
   position: string;
-  rating: number;
   image: string;
   nationality: string;
   club: string;
@@ -182,7 +181,6 @@ export const mockPlayers: Player[] = [
     id: "1",
     name: "Mert Günok",
     position: "GK",
-    rating: 77,
     image:
       "https://img.a.transfermarkt.technology/portrait/header/51894-1727355668.png",
     nationality: "Turkey",
@@ -192,7 +190,6 @@ export const mockPlayers: Player[] = [
     id: "2",
     name: "Jonas Svensson",
     position: "RB",
-    rating: 72,
     image:
       "https://img.a.transfermarkt.technology/portrait/header/136184-1727356799.png",
     nationality: "Turkey",
@@ -202,7 +199,6 @@ export const mockPlayers: Player[] = [
     id: "3",
     name: "Gabriel Paulista",
     position: "CB",
-    rating: 88,
     image:
       "https://img.a.transfermarkt.technology/portrait/header/149498-1727355000.png",
     nationality: "Portugal",
@@ -212,7 +208,6 @@ export const mockPlayers: Player[] = [
     id: "4",
     name: "Felix Uduokhai",
     position: "CB",
-    rating: 86,
     image:
       "https://img.a.transfermarkt.technology/portrait/header/278343-1727357502.png",
     nationality: "Brazil",
@@ -222,7 +217,6 @@ export const mockPlayers: Player[] = [
     id: "5",
     name: "Arthur Masuaku",
     position: "LB",
-    rating: 84,
     image:
       "https://img.a.transfermarkt.technology/portrait/header/181380-1696075631.png",
     nationality: "Brazil",
@@ -232,7 +226,6 @@ export const mockPlayers: Player[] = [
     id: "6",
     name: "Gedson Fernandes",
     position: "CM",
-    rating: 83,
     image:
       "https://img.a.transfermarkt.technology/portrait/header/337800-1727354898.png",
     nationality: "Turkey",
@@ -437,7 +430,6 @@ export const usePlayerStore = create<PlayerState>()(
           id: "mert-gunok",
           name: "Mert Günok",
           position: "GK",
-          rating: 82,
           image: "/api/placeholder/150/150",
           nationality: "Turkey",
           club: "Beşiktaş",
@@ -448,7 +440,6 @@ export const usePlayerStore = create<PlayerState>()(
           id: "arthur-masuaku",
           name: "Arthur Masuaku",
           position: "LB",
-          rating: 78,
           image: "/api/placeholder/150/150",
           nationality: "France",
           club: "Beşiktaş",
@@ -459,7 +450,6 @@ export const usePlayerStore = create<PlayerState>()(
           id: "gabriel-paulista",
           name: "Gabriel Paulista",
           position: "CB",
-          rating: 80,
           image: "/api/placeholder/150/150",
           nationality: "Brazil",
           club: "Beşiktaş",
@@ -470,7 +460,6 @@ export const usePlayerStore = create<PlayerState>()(
           id: "felix-uduokhai",
           name: "Felix Uduokhai",
           position: "CB",
-          rating: 79,
           image: "/api/placeholder/150/150",
           nationality: "Germany",
           club: "Beşiktaş",
@@ -481,7 +470,6 @@ export const usePlayerStore = create<PlayerState>()(
           id: "jonas-svensson",
           name: "Jonas Svensson",
           position: "RB",
-          rating: 77,
           image: "/api/placeholder/150/150",
           nationality: "Norway",
           club: "Beşiktaş",
@@ -492,7 +480,6 @@ export const usePlayerStore = create<PlayerState>()(
           id: "gedson-fernandes",
           name: "Gedson Fernandes",
           position: "CM",
-          rating: 81,
           image: "/api/placeholder/150/150",
           nationality: "Portugal",
           club: "Beşiktaş",
@@ -503,7 +490,6 @@ export const usePlayerStore = create<PlayerState>()(
           id: "alex-oxlade-chamberlain-2",
           name: "Alex Oxlade-Chamberlain",
           position: "CM",
-          rating: 83,
           image: "/api/placeholder/150/150",
           nationality: "England",
           club: "Beşiktaş",
@@ -514,7 +500,6 @@ export const usePlayerStore = create<PlayerState>()(
           id: "rafa-silva",
           name: "Rafa Silva",
           position: "CAM",
-          rating: 85,
           image: "/api/placeholder/150/150",
           nationality: "Portugal",
           club: "Beşiktaş",
@@ -525,7 +510,6 @@ export const usePlayerStore = create<PlayerState>()(
           id: "ernest-muci",
           name: "Ernest Muci",
           position: "LW",
-          rating: 76,
           image: "/api/placeholder/150/150",
           nationality: "Albania",
           club: "Beşiktaş",
@@ -536,7 +520,6 @@ export const usePlayerStore = create<PlayerState>()(
           id: "ciro-immobile",
           name: "Ciro Immobile",
           position: "ST",
-          rating: 87,
           image: "/api/placeholder/150/150",
           nationality: "Italy",
           club: "Beşiktaş",
@@ -547,7 +530,6 @@ export const usePlayerStore = create<PlayerState>()(
           id: "milot-rashica",
           name: "Milot Rashica",
           position: "RW",
-          rating: 80,
           image: "/api/placeholder/150/150",
           nationality: "Kosovo",
           club: "Beşiktaş",

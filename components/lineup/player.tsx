@@ -158,9 +158,7 @@ const PlayerCard = memo(function PlayerCard({
               >
                 {getAreaBasedPosition(player.fieldPosition)}
               </Badge>
-              <div className="text-xs font-semibold bg-yellow-500 text-black px-1 rounded">
-                {player.rating}
-              </div>
+
             </div>
           </div>
 

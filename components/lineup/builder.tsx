@@ -42,13 +42,7 @@ export default function LineupBuilder() {
     setFormation(formation);
   };
 
-  const averageRating =
-    lineupPlayers.length > 0
-      ? Math.round(
-          lineupPlayers.reduce((acc, p) => acc + p.rating, 0) /
-            lineupPlayers.length
-        )
-      : 0;
+
 
   return (
     <div className="p-4">

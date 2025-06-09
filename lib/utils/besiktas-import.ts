@@ -38,24 +38,15 @@ export interface BesiktasData {
   players: BesiktasPlayer[];
 }
 
-function calculateRating(marketValue: number, age: number): number {
-  let rating = Math.min(95, Math.max(50, 50 + Math.log10(marketValue / 100000) * 10));
-  
-  if (age <= 23) rating += 2;
-  else if (age >= 32) rating -= 3;
-  
-  return Math.round(rating);
-}
+
 
 export function transformBesiktasPlayer(besiktasPlayer: BesiktasPlayer): Player {
   const mappedPosition = POSITION_MAPPING[besiktasPlayer.position] || "CM";
-  const rating = calculateRating(besiktasPlayer.marketValue, besiktasPlayer.age);
   
   return {
     id: besiktasPlayer.id,
     name: besiktasPlayer.name,
     position: mappedPosition,
-    rating: rating,
     image: besiktasPlayer.imageUrl,
     nationality: besiktasPlayer.nationality[0] || "Unknown",
     club: "Beşiktaş"
