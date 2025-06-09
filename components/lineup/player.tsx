@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { LineupPlayer } from "@/lib/store/player.store";
+import { getAreaBasedPosition } from "@/lib/utils/besiktas-import";
 
 interface PlayerCardProps {
   player: LineupPlayer;
@@ -112,7 +113,7 @@ const PlayerCard = memo(function PlayerCard({
           animate={{ opacity: 0.8 }}
           transition={{ delay: 0.3 }}
         >
-          {player.position}
+          {getAreaBasedPosition(player.fieldPosition)}
         </motion.div>
       </motion.div>
 
@@ -155,7 +156,7 @@ const PlayerCard = memo(function PlayerCard({
                 variant="secondary"
                 className="text-xs px-1 py-0 bg-white bg-opacity-20 text-white border-white border-opacity-30"
               >
-                {player.position}
+                {getAreaBasedPosition(player.fieldPosition)}
               </Badge>
               <div className="text-xs font-semibold bg-yellow-500 text-black px-1 rounded">
                 {player.rating}

@@ -13,6 +13,7 @@ import {
   throttle,
   isWithinFieldBounds,
 } from "@/lib/store/player.store";
+import { getAreaBasedPosition } from "@/lib/utils/besiktas-import";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n/context";
 

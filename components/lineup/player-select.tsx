@@ -23,6 +23,7 @@ import { Badge } from "@/components/ui/badge";
 import { Search, X, Star } from "lucide-react";
 import { usePlayerStore, Player } from "@/lib/store/player.store";
 import { useI18n } from "@/lib/i18n/context";
+import { isPositionCompatible } from "@/lib/utils/besiktas-import";
 
 interface PlayerSelectionResponsiveProps {
   isOpen: boolean;
@@ -41,6 +42,7 @@ export default function PlayerSelectionResponsive({
     updateLineupPlayer,
     getPlayerByPosition,
     isPlayerInLineup,
+    getTargetPositionForSlot,
   } = usePlayerStore();
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -63,15 +65,19 @@ export default function PlayerSelectionResponsive({
   }, [positionId, getPlayerByPosition]);
 
   const filteredPlayers = useMemo(() => {
+    const targetPosition = positionId ? getTargetPositionForSlot(positionId) : null;
     return availablePlayers
       .filter(
-        (player) =>
-          player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          player.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          player.nationality.toLowerCase().includes(searchTerm.toLowerCase())
+        (player) => {
+          const matchesSearch = player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            player.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            player.nationality.toLowerCase().includes(searchTerm.toLowerCase());
+          const matchesPosition = !targetPosition || isPositionCompatible(player.position, targetPosition);
+          return matchesSearch && matchesPosition;
+        }
       )
       .sort((a, b) => b.rating - a.rating);
-  }, [availablePlayers, searchTerm]);
+  }, [availablePlayers, searchTerm, positionId, getTargetPositionForSlot]);
 
   const handlePlayerSelect = (player: Player) => {
     if (positionId) {

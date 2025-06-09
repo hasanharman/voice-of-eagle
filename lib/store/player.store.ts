@@ -1,6 +1,8 @@
 // lib/store/player.store.ts
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+import { importBesiktasPlayers, type BesiktasData } from "@/lib/utils/besiktas-import";
+import besiktasData from "../../public/besiktas-data.json";
 
 export interface Player {
   id: string;
@@ -135,16 +137,16 @@ export const isWithinFieldBounds = (x: number, y: number): boolean => {
 export const formations = {
   "4-3-3": [
     { id: "gk", position: { x: 50, y: 85 }, defaultPosition: "GK" },
-    { id: "lb", position: { x: 20, y: 65 }, defaultPosition: "LB" },
-    { id: "cb1", position: { x: 40, y: 65 }, defaultPosition: "CB" },
-    { id: "cb2", position: { x: 60, y: 65 }, defaultPosition: "CB" },
-    { id: "rb", position: { x: 80, y: 65 }, defaultPosition: "RB" },
+    { id: "lb", position: { x: 15, y: 65 }, defaultPosition: "LB" },
+    { id: "cb1", position: { x: 35, y: 65 }, defaultPosition: "CB" },
+    { id: "cb2", position: { x: 65, y: 65 }, defaultPosition: "CB" },
+    { id: "rb", position: { x: 85, y: 65 }, defaultPosition: "RB" },
     { id: "cm1", position: { x: 30, y: 45 }, defaultPosition: "CM" },
     { id: "cm2", position: { x: 50, y: 45 }, defaultPosition: "CM" },
     { id: "cm3", position: { x: 70, y: 45 }, defaultPosition: "CM" },
-    { id: "lw", position: { x: 25, y: 20 }, defaultPosition: "LW" },
+    { id: "lw", position: { x: 15, y: 20 }, defaultPosition: "LW" },
     { id: "st", position: { x: 50, y: 15 }, defaultPosition: "ST" },
-    { id: "rw", position: { x: 75, y: 20 }, defaultPosition: "RW" },
+    { id: "rw", position: { x: 85, y: 20 }, defaultPosition: "RW" },
   ],
   "4-2-3-1": [
     { id: "gk", position: { x: 50, y: 85 }, defaultPosition: "GK" },
@@ -420,12 +422,13 @@ interface PlayerState {
   getAvailablePlayersForPosition: (position: string) => Player[];
   isPlayerInLineup: (playerId: string) => boolean;
   isPlayerInSubstitutes: (playerId: string) => boolean;
+  getTargetPositionForSlot: (positionId: string) => string;
 }
 
 export const usePlayerStore = create<PlayerState>()(
   devtools(
     (set, get) => ({
-      availablePlayers: mockPlayers,
+      availablePlayers: [...mockPlayers, ...importBesiktasPlayers(besiktasData as BesiktasData)],
       lineupPlayers: [],
       substituteePlayers: [],
       selectedFormation: "4-3-3",
@@ -795,6 +798,14 @@ export const usePlayerStore = create<PlayerState>()(
 
       isPlayerInSubstitutes: (playerId) => {
         return get().substituteePlayers.some((p) => p.id === playerId);
+      },
+
+      getTargetPositionForSlot: (positionId) => {
+        const { selectedFormation } = get();
+        const formationPos = formations[selectedFormation].find(
+          (p) => p.id === positionId
+        );
+        return formationPos?.defaultPosition || "CM";
       },
     }),
     {
