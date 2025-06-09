@@ -21,22 +21,22 @@ export function DataTableToolbar<TData>({
 
   // Filter options
   const positions = [
-    { label: "Goalkeeper", value: "GK" },
-    { label: "Center Back", value: "CB" },
-    { label: "Left Back", value: "LB" },
-    { label: "Right Back", value: "RB" },
-    { label: "Left Wing Back", value: "LWB" },
-    { label: "Right Wing Back", value: "RWB" },
-    { label: "Defensive Midfielder", value: "CDM" },
-    { label: "Central Midfielder", value: "CM" },
-    { label: "Attacking Midfielder", value: "CAM" },
-    { label: "Left Midfielder", value: "LM" },
-    { label: "Right Midfielder", value: "RM" },
-    { label: "Left Wing", value: "LW" },
-    { label: "Right Wing", value: "RW" },
-    { label: "Center Forward", value: "CF" },
-    { label: "Striker", value: "ST" },
-    { label: "Second Striker", value: "SS" },
+    { label: t("positions.GK"), value: "GK" },
+    { label: t("positions.CB"), value: "CB" },
+    { label: t("positions.LB"), value: "LB" },
+    { label: t("positions.RB"), value: "RB" },
+    { label: t("positions.LWB"), value: "LWB" },
+    { label: t("positions.RWB"), value: "RWB" },
+    { label: t("positions.CDM"), value: "CDM" },
+    { label: t("positions.CM"), value: "CM" },
+    { label: t("positions.CAM"), value: "CAM" },
+    { label: t("positions.LM"), value: "LM" },
+    { label: t("positions.RM"), value: "RM" },
+    { label: t("positions.LW"), value: "LW" },
+    { label: t("positions.RW"), value: "RW" },
+    { label: t("positions.CF"), value: "CF" },
+    { label: t("positions.ST"), value: "ST" },
+    { label: t("positions.SS"), value: "SS" },
   ];
 
   const leagues = [
@@ -50,16 +50,21 @@ export function DataTableToolbar<TData>({
   ];
 
   const statuses = [
-    { label: "Active", value: "active" },
-    { label: "Completed", value: "completed" },
-    { label: "Rejected", value: "rejected" },
-    { label: "Expired", value: "expired" },
+    { label: t("table.active"), value: "active" },
+    { label: t("table.completed"), value: "completed" },
+    { label: t("table.rejected"), value: "rejected" },
+    { label: t("table.expired"), value: "expired" },
   ];
 
   const priorities = [
-    { label: "High Priority", value: "high" },
-    { label: "Medium Priority", value: "medium" },
-    { label: "Low Priority", value: "low" },
+    { label: t("common.high"), value: "high" },
+    { label: t("common.medium"), value: "medium" },
+    { label: t("common.low"), value: "low" },
+  ];
+
+  const directions = [
+    { label: t("table.incoming"), value: "incoming" },
+    { label: t("table.outgoing"), value: "outgoing" },
   ];
 
   return (
@@ -87,7 +92,7 @@ export function DataTableToolbar<TData>({
         {table.getColumn("status") && (
           <DataTableFacetedFilter
             column={table.getColumn("status")}
-            title="Status"
+            title={t("table.status")}
             options={statuses}
           />
         )}
@@ -95,8 +100,16 @@ export function DataTableToolbar<TData>({
         {table.getColumn("calculated_priority_level") && (
           <DataTableFacetedFilter
             column={table.getColumn("calculated_priority_level")}
-            title="Priority"
+            title={t("table.priority")}
             options={priorities}
+          />
+        )}
+
+        {table.getColumn("direction") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("direction")}
+            title={t("table.direction")}
+            options={directions}
           />
         )}
 

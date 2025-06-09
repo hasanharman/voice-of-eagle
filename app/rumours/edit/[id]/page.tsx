@@ -1,19 +1,20 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { useI18n } from "@/lib/i18n/context";
+import { rumourFormSchema, type RumourFormData } from "@/lib/schemas/rumour.schema";
+import { TransferRumour } from "@/lib/types/rumours.types";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Plus, X } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
-import { useI18n } from "@/lib/i18n/context";
-import { rumourFormSchema, type RumourFormData } from "@/lib/schemas/rumour.schema";
 import { VideoLinksInput } from "@/components/forms/video-links-input";
 import { CountrySelector } from "@/components/forms/country-selector";
 
@@ -23,10 +24,13 @@ const positions = [
   "LW", "RW", "CF", "ST", "SS"
 ];
 
-export default function AddRumourPage() {
+export default function EditRumourPage() {
   const { t } = useI18n();
-  const { user, isAdmin, loading } = useAuth();
+  const { user, isAdmin } = useAuth();
   const router = useRouter();
+  const params = useParams();
+  const [rumour, setRumour] = useState<TransferRumour | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newPosition, setNewPosition] = useState("");
 
@@ -39,19 +43,53 @@ export default function AddRumourPage() {
     }
   });
 
-  if (loading) {
-    return <div className="flex justify-center items-center h-64">{t('common.loading')}</div>;
-  }
+  useEffect(() => {
+    const fetchRumour = async () => {
+      if (!params.id) return;
+      
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from("transfer_rumours")
+        .select("*")
+        .eq("id", params.id)
+        .single();
+
+      if (error || !data) {
+        router.push("/rumours");
+        return;
+      }
+
+      setRumour(data);
+      form.reset({
+        player_name: data.player_name,
+        age: data.age,
+        nationality: data.nationality,
+        nationality_code: data.nationality_code,
+        positions: data.positions || [],
+        current_team: data.current_team,
+        current_league: data.current_league,
+        market_value: data.market_value ? data.market_value / 100 : undefined,
+        direction: data.direction || "incoming",
+        source_url: data.source_url,
+        transfermarkt_url: data.transfermarkt_url,
+        photo_url: data.photo_url,
+        video_links: data.video_links || []
+      });
+      setIsLoading(false);
+    };
+
+    fetchRumour();
+  }, [params.id, form, router]);
 
   const isDevelopment = process.env.NODE_ENV === 'development';
   
-  if (!isDevelopment && !user) {
+  if (!isDevelopment && (!user || !isAdmin)) {
     return (
       <div className="container mx-auto py-8">
         <Card>
           <CardContent className="pt-6">
             <p className="text-center text-muted-foreground">
-              {t("auth.signInRequired")}
+              {t("rumours.noPermissionToEdit")}
             </p>
           </CardContent>
         </Card>
@@ -59,14 +97,12 @@ export default function AddRumourPage() {
     );
   }
 
-  if (!isDevelopment && !isAdmin) {
+  if (isLoading) {
     return (
       <div className="container mx-auto py-8">
         <Card>
           <CardContent className="pt-6">
-            <p className="text-center text-muted-foreground">
-              {t("rumours.noPermissionToAdd")}
-            </p>
+            <p className="text-center">{t("common.loading")}</p>
           </CardContent>
         </Card>
       </div>
@@ -77,30 +113,29 @@ export default function AddRumourPage() {
     setIsSubmitting(true);
     try {
       const supabase = createClient();
-      const { error } = await supabase.from("transfer_rumours").insert({
-        ...data,
-        market_value: data.market_value ? data.market_value * 100 : null,
-        created_by: user?.id || "dev-user",
-        status: "active",
-        direction: "incoming"
-      });
+      const { error } = await supabase
+        .from("transfer_rumours")
+        .update({
+          ...data,
+          market_value: data.market_value ? data.market_value * 100 : null,
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", params.id);
 
       if (error) throw error;
       router.push("/rumours");
     } catch (error) {
-      console.error("Error adding rumour:", error);
+      console.error("Error updating rumour:", error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const addPosition = () => {
-    if (newPosition) {
+    if (newPosition && !form.getValues("positions")?.includes(newPosition)) {
       const currentPositions = form.getValues("positions") || [];
-      if (!currentPositions.includes(newPosition)) {
-        form.setValue("positions", [...currentPositions, newPosition]);
-        setNewPosition("");
-      }
+      form.setValue("positions", [...currentPositions, newPosition]);
+      setNewPosition("");
     }
   };
 
@@ -113,10 +148,8 @@ export default function AddRumourPage() {
     <div className="container mx-auto py-8">
       <Card>
         <CardHeader>
-          <CardTitle>{t("rumours.addNewRumour")}</CardTitle>
-          <CardDescription>
-            {t("rumours.fillPlayerDetails")}
-          </CardDescription>
+          <CardTitle>{t("rumours.editRumour")}</CardTitle>
+          <CardDescription>{t("rumours.updatePlayerDetails")}</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -352,7 +385,7 @@ export default function AddRumourPage() {
               />
 
               <Button type="submit" disabled={isSubmitting} className="w-full">
-                {isSubmitting ? t("forms.submitting") : t("forms.addRumour")}
+                {isSubmitting ? t("forms.updating") : t("forms.updateRumour")}
               </Button>
             </form>
           </Form>

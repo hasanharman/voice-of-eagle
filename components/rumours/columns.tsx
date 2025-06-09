@@ -26,6 +26,7 @@ import { formatCurrency, formatDate, getCountryFlag } from "@/lib/utils";
 import { VotingButtons } from "@/components/rumours/voting-buttons";
 import { VideoLinksPopover } from "@/components/rumours/video-links-popover";
 import { PriorityVoting } from "@/components/rumours/priority-voting";
+import { PositionsPopover } from "@/components/rumours/positions-popover";
 
 export const createColumns = (
   t: (key: string) => string
@@ -95,15 +96,7 @@ export const createColumns = (
         const positions = row.original.positions;
         if (!positions || positions.length === 0) return null;
 
-        return (
-          <div className="flex flex-wrap gap-1">
-            {positions.map((position) => (
-              <Badge key={position} variant="secondary" className="text-xs">
-                {position}
-              </Badge>
-            ))}
-          </div>
-        );
+        return <PositionsPopover positions={positions} />;
       },
       filterFn: (row, id, value) => {
         const positions = row.getValue(id) as string[];
@@ -205,9 +198,31 @@ export const createColumns = (
 
         return (
           <Badge className={statusColors[status]}>
-            {status.charAt(0).toUpperCase() + status.slice(1)}
+            {t(`table.${status}`)}
           </Badge>
         );
+      },
+    },
+    {
+      accessorKey: "direction",
+      header: t("table.direction"),
+      cell: ({ row }) => {
+        const direction = row.original.direction;
+        if (!direction) return null;
+
+        const directionColors = {
+          incoming: "bg-blue-100 text-blue-800",
+          outgoing: "bg-orange-100 text-orange-800",
+        };
+
+        return (
+          <Badge className={directionColors[direction]}>
+            {t(`table.${direction}`)}
+          </Badge>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
       },
     },
     {
@@ -221,49 +236,53 @@ export const createColumns = (
       },
       enableSorting: false,
     },
-    // {
-    //   id: "actions",
-    //   header: t("table.actions"),
-    //   cell: ({ row }) => {
-    //     const rumour = row.original;
+    {
+      id: "actions",
+      header: t("table.actions"),
+      cell: ({ row }) => {
+        const rumour = row.original;
 
-    //     return (
-    //       <DropdownMenu>
-    //         <DropdownMenuTrigger asChild>
-    //           <Button variant="ghost" className="h-8 w-8 p-0">
-    //             <span className="sr-only">Open menu</span>
-    //             <MoreHorizontal className="h-4 w-4" />
-    //           </Button>
-    //         </DropdownMenuTrigger>
-    //         <DropdownMenuContent align="end">
-    //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-    //           <DropdownMenuItem
-    //             onClick={() => navigator.clipboard.writeText(rumour.id)}
-    //           >
-    //             Copy rumour ID
-    //           </DropdownMenuItem>
-    //           <DropdownMenuSeparator />
-    //           {rumour.transfermarkt_url && (
-    //             <DropdownMenuItem asChild>
-    //               <a
-    //                 href={rumour.transfermarkt_url}
-    //                 target="_blank"
-    //                 rel="noopener noreferrer"
-    //               >
-    //                 View on Transfermarkt
-    //               </a>
-    //             </DropdownMenuItem>
-    //           )}
-    //           <DropdownMenuItem>Edit rumour</DropdownMenuItem>
-    //           <DropdownMenuItem className="text-red-600">
-    //             Delete rumour
-    //           </DropdownMenuItem>
-    //         </DropdownMenuContent>
-    //       </DropdownMenu>
-    //     );
-    //   },
-    //   enableSorting: false,
-    //   enableHiding: false,
-    // },
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(rumour.id)}
+              >
+                Copy rumour ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              {rumour.transfermarkt_url && (
+                <DropdownMenuItem asChild>
+                  <a
+                    href={rumour.transfermarkt_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View on Transfermarkt
+                  </a>
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem asChild>
+                <a href={`/rumours/edit/${rumour.id}`}>
+                  Edit rumour
+                </a>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-red-600">
+                Delete rumour
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+      enableSorting: false,
+      enableHiding: false,
+    },
   ];
 };

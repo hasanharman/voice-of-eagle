@@ -137,7 +137,7 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
       </PopoverTrigger>
       <PopoverContent className="w-64">
         <div className="space-y-3">
-          <div className="text-sm font-medium">Vote on Priority Level</div>
+          <div className="text-sm font-medium">{t('priority.voteOnPriorityLevel')}</div>
 
           <div className="space-y-2">
             {(["high", "medium", "low"] as const).map((priority) => (
@@ -149,7 +149,7 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
                 disabled={isVoting || isLoading}
                 className="w-full justify-between"
               >
-                <span className="capitalize">{priority} Priority</span>
+                <span className="capitalize">{t('common.' + priority)} {t('priority.priority')}</span>
                 <Badge variant="secondary">
                   {priority === "high"
                     ? rumour.high_priority_votes
@@ -162,7 +162,7 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
           </div>
 
           <div className="text-xs text-muted-foreground">
-            Average Score: {rumour.avg_priority_score.toFixed(1)}/3.0
+            {t('priority.averageScore')}: {rumour.avg_priority_score.toFixed(1)}/3.0
           </div>
         </div>
       </PopoverContent>
