@@ -103,6 +103,10 @@ export const translations = {
       position: "Pozisyon",
       league: "Lig",
       reset: "Sıfırla",
+      active: "Aktif",
+      completed: "Tamamlandı",
+      rejected: "Reddedildi",
+      expired: "Süresi Doldu",
     },
     auth: {
       signUpToVote: "Oy vermek için kaydol",
@@ -247,6 +251,10 @@ export const translations = {
       position: "Position",
       league: "League",
       reset: "Reset",
+      active: "Active",
+      completed: "Completed",
+      rejected: "Rejected",
+      expired: "Expired",
     },
     auth: {
       signUpToVote: "Sign up to vote",
