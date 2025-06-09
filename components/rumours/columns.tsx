@@ -26,10 +26,8 @@ import { formatCurrency, formatDate, getCountryFlag } from "@/lib/utils";
 import { VotingButtons } from "@/components/rumours/voting-buttons";
 import { VideoLinksPopover } from "@/components/rumours/video-links-popover";
 import { PriorityVoting } from "@/components/rumours/priority-voting";
-import { useI18n } from "@/lib/i18n/context";
 
-export const createColumns = (): ColumnDef<RumourWithScores>[] => {
-  const { t } = useI18n();
+export const createColumns = (t: (key: string) => string): ColumnDef<RumourWithScores>[] => {
   
   return [
   {
@@ -285,5 +283,3 @@ export const createColumns = (): ColumnDef<RumourWithScores>[] => {
   },
 ];
 };
-
-export const columns = createColumns();

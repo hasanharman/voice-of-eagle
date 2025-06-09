@@ -93,5 +93,5 @@ function RumoursTable() {
     );
   }
 
-  return <DataTable columns={createColumns()} data={rumours} />;
+  return <DataTable columns={createColumns(t)} data={rumours} />;
 }
