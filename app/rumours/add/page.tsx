@@ -30,7 +30,7 @@ export default function AddRumourPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newPosition, setNewPosition] = useState("");
 
-  const form = useForm<RumourFormData>({
+  const form = useForm({
     resolver: zodResolver(rumourFormSchema),
     defaultValues: {
       player_name: "",
@@ -95,15 +95,17 @@ export default function AddRumourPage() {
   };
 
   const addPosition = () => {
-    if (newPosition && !form.getValues("positions").includes(newPosition)) {
-      const currentPositions = form.getValues("positions");
-      form.setValue("positions", [...currentPositions, newPosition]);
-      setNewPosition("");
+    if (newPosition) {
+      const currentPositions = form.getValues("positions") || [];
+      if (!currentPositions.includes(newPosition)) {
+        form.setValue("positions", [...currentPositions, newPosition]);
+        setNewPosition("");
+      }
     }
   };
 
   const removePosition = (position: string) => {
-    const currentPositions = form.getValues("positions");
+    const currentPositions = form.getValues("positions") || [];
     form.setValue("positions", currentPositions.filter(p => p !== position));
   };
 
@@ -185,7 +187,7 @@ export default function AddRumourPage() {
                     <FormControl>
                       <div className="space-y-4">
                         <div className="flex flex-wrap gap-2">
-                          {field.value.map((position) => (
+                          {(field.value || []).map((position) => (
                             <Badge key={position} variant="secondary" className="flex items-center gap-1">
                               {t(`positions.${position}`)}
                               <Button
@@ -334,7 +336,7 @@ export default function AddRumourPage() {
                   <FormItem>
                     <FormLabel>{t("forms.videoLinks")}</FormLabel>
                     <FormControl>
-                      <VideoLinksInput value={field.value} onChange={field.onChange} />
+                      <VideoLinksInput value={field.value || []} onChange={field.onChange} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

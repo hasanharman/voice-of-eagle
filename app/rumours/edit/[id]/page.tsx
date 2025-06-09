@@ -34,7 +34,7 @@ export default function EditRumourPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newPosition, setNewPosition] = useState("");
 
-  const form = useForm<RumourFormData>({
+  const form = useForm({
     resolver: zodResolver(rumourFormSchema),
     defaultValues: {
       player_name: "",

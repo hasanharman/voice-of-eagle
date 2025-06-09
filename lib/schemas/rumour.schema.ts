@@ -5,7 +5,7 @@ export const rumourFormSchema = z.object({
   age: z.number().optional(),
   nationality: z.string().optional(),
   nationality_code: z.string().optional(),
-  positions: z.array(z.string()).optional().default([]),
+  positions: z.array(z.string()).default([]),
   current_team: z.string().optional(),
   current_league: z.string().optional(),
   market_value: z.number().optional(),
@@ -17,7 +17,7 @@ export const rumourFormSchema = z.object({
     title: z.string().min(1, "Video title is required"),
     url: z.string().url("Invalid video URL"),
     platform: z.enum(["youtube", "vimeo", "other"])
-  })).optional().default([])
+  })).default([])
 });
 
 export type RumourFormData = z.infer<typeof rumourFormSchema>;
