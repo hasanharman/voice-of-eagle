@@ -137,13 +137,13 @@ export const isWithinFieldBounds = (x: number, y: number): boolean => {
 export const formations = {
   "4-3-3": [
     { id: "gk", position: { x: 50, y: 85 }, defaultPosition: "GK" },
-    { id: "lb", position: { x: 15, y: 65 }, defaultPosition: "LB" },
+    { id: "lb", position: { x: 85, y: 65 }, defaultPosition: "LB" },
     { id: "cb1", position: { x: 35, y: 65 }, defaultPosition: "CB" },
     { id: "cb2", position: { x: 65, y: 65 }, defaultPosition: "CB" },
-    { id: "rb", position: { x: 85, y: 65 }, defaultPosition: "RB" },
+    { id: "rb", position: { x: 15, y: 65 }, defaultPosition: "RB" },
     { id: "cm1", position: { x: 30, y: 45 }, defaultPosition: "CM" },
-    { id: "cm2", position: { x: 50, y: 45 }, defaultPosition: "CM" },
-    { id: "cm3", position: { x: 70, y: 45 }, defaultPosition: "CM" },
+    { id: "cam", position: { x: 50, y: 35 }, defaultPosition: "CAM" },
+    { id: "cm2", position: { x: 70, y: 45 }, defaultPosition: "CM" },
     { id: "lw", position: { x: 15, y: 20 }, defaultPosition: "LW" },
     { id: "st", position: { x: 50, y: 15 }, defaultPosition: "ST" },
     { id: "rw", position: { x: 85, y: 20 }, defaultPosition: "RW" },
@@ -428,7 +428,7 @@ interface PlayerState {
 export const usePlayerStore = create<PlayerState>()(
   devtools(
     (set, get) => ({
-      availablePlayers: [...mockPlayers, ...importBesiktasPlayers(besiktasData as BesiktasData)],
+      availablePlayers: importBesiktasPlayers(besiktasData as BesiktasData),
       lineupPlayers: [],
       substituteePlayers: [],
       selectedFormation: "4-3-3",
