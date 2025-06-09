@@ -125,29 +125,7 @@ export const createColumns = (
         );
       },
     },
-    {
-      accessorKey: "direction",
-      header: t("table.direction"),
-      cell: ({ row }) => {
-        const direction = row.original.direction;
-        if (!direction) return <span className="text-muted-foreground">-</span>;
 
-        return (
-          <div className="flex items-center gap-2">
-            {direction === "incoming" ? (
-              <ArrowDown className="h-4 w-4 text-green-600" />
-            ) : (
-              <ArrowUp className="h-4 w-4 text-blue-600" />
-            )}
-            <span className="text-sm">
-              {direction === "incoming"
-                ? t("table.incoming")
-                : t("table.outgoing")}
-            </span>
-          </div>
-        );
-      },
-    },
     {
       accessorKey: "market_value",
       header: t("table.marketValue"),
