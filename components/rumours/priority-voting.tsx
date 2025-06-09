@@ -162,7 +162,7 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
           </div>
 
           <div className="text-xs text-muted-foreground">
-            {t('priority.averageScore')}: {rumour.avg_priority_score.toFixed(1)}/3.0
+            {t('priority.averageScore')}: {rumour.avg_priority_score?.toFixed(1) || '0.0'}/3.0
           </div>
         </div>
       </PopoverContent>
