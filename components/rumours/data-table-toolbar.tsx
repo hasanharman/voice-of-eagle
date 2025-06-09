@@ -50,16 +50,16 @@ export function DataTableToolbar<TData>({
   ];
 
   const statuses = [
-    { label: "Active", value: "active" },
-    { label: "Completed", value: "completed" },
-    { label: "Rejected", value: "rejected" },
-    { label: "Expired", value: "expired" },
+    { label: t("table.active"), value: "active" },
+    { label: t("table.completed"), value: "completed" },
+    { label: t("table.rejected"), value: "rejected" },
+    { label: t("table.expired"), value: "expired" },
   ];
 
   const priorities = [
-    { label: "High Priority", value: "high" },
-    { label: "Medium Priority", value: "medium" },
-    { label: "Low Priority", value: "low" },
+    { label: t("common.high"), value: "high" },
+    { label: t("common.medium"), value: "medium" },
+    { label: t("common.low"), value: "low" },
   ];
 
   const directions = [
@@ -92,7 +92,7 @@ export function DataTableToolbar<TData>({
         {table.getColumn("status") && (
           <DataTableFacetedFilter
             column={table.getColumn("status")}
-            title="Status"
+            title={t("table.status")}
             options={statuses}
           />
         )}
@@ -100,7 +100,7 @@ export function DataTableToolbar<TData>({
         {table.getColumn("calculated_priority_level") && (
           <DataTableFacetedFilter
             column={table.getColumn("calculated_priority_level")}
-            title="Priority"
+            title={t("table.priority")}
             options={priorities}
           />
         )}

@@ -198,7 +198,7 @@ export const createColumns = (
 
         return (
           <Badge className={statusColors[status]}>
-            {status.charAt(0).toUpperCase() + status.slice(1)}
+            {t(`table.${status}`)}
           </Badge>
         );
       },
