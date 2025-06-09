@@ -14,6 +14,7 @@ import {
   isWithinFieldBounds,
 } from "@/lib/store/player.store";
 import { toast } from "sonner";
+import { useI18n } from "@/lib/i18n/context";
 
 interface FootballFieldProps {
   onPlayerSlotClick: (positionId: string) => void;
@@ -22,6 +23,7 @@ interface FootballFieldProps {
 export default function FootballField({
   onPlayerSlotClick,
 }: FootballFieldProps) {
+  const { t } = useI18n()
   const {
     selectedFormation,
     lineupPlayers,
@@ -178,9 +180,7 @@ export default function FootballField({
           details:
             "⚠️ Oyuncu eski konumuna döndü - saha sınırları dışına bırakılamaz",
         });
-        toast.error(
-          "Oyuncu eski konumuna döndü - saha sınırları dışına bırakılamaz"
-        );
+        toast.error(t('lineup.playerReturnedToPosition'));
         resetDragState();
         return;
       }
@@ -219,7 +219,7 @@ export default function FootballField({
         ).toFixed(0)}% confidence)`
       );
       toast.success(
-        `Oyuncu yeni konumda: ${detection.position} (${(
+        `${t('lineup.playerNewPosition')}: ${detection.position} (${(
           detection.confidence * 100
         ).toFixed(0)}% confidence)`
       );
@@ -265,7 +265,7 @@ export default function FootballField({
           type: null,
           details: "⚠️ Yedeği saha sınırları dışına bırakamazsınız",
         });
-        toast.warning("Yedeği saha sınırları dışına bırakamazsınız");
+        toast.warning(t('lineup.cannotDropSubstituteOutside'));
         setDraggedPlayer(null, null);
         return;
       }
@@ -292,7 +292,7 @@ export default function FootballField({
           details: `${draggedPlayer.name} ↔ ${occupiedPlayer.name} değişikliği yapıldı`,
         });
         toast.success(
-          `${draggedPlayer.name} ↔ ${occupiedPlayer.name} değişikliği yapıldı`
+          `${draggedPlayer.name} ↔ ${occupiedPlayer.name} ${t('lineup.substitutionMade')}`
         );
       } else {
         // Add substitute to empty field position
@@ -302,7 +302,7 @@ export default function FootballField({
           type: "substitute",
           details: `${draggedPlayer.name} sahaya eklendi`,
         });
-        toast.success(`${draggedPlayer.name} sahaya eklendi`);
+        toast.success(`${draggedPlayer.name} ${t('lineup.playerAddedToField')}`);
       }
 
       setDraggedPlayer(null, null);
@@ -498,9 +498,9 @@ export default function FootballField({
                   />
                 </svg>
               </div>
-              <p className="text-blue-700 font-medium">Yedeği sahaya bırak</p>
+              <p className="text-blue-700 font-medium">{t('lineup.dropSubstituteHere')}</p>
               <p className="text-blue-600 text-sm">
-                Oyuncunun üzerine bırakarak değiştir
+                {t('lineup.dropToReplace')}
               </p>
             </div>
           </motion.div>

@@ -1,7 +1,12 @@
-import InfoMenu from "@/components/navbar-components/info-menu"
+"use client"
+
+import AddRumourButton from "@/components/navbar-components/add-rumour-button"
 import Logo from "@/components/navbar-components/logo"
 import NotificationMenu from "@/components/navbar-components/notification-menu"
 import UserMenu from "@/components/navbar-components/user-menu"
+import ThemeSwitcher from "@/components/navbar-components/theme-switcher"
+import SocialButtons from "@/components/navbar-components/social-buttons"
+import LanguageSwitcher from "@/components/navbar-components/language-switcher"
 import { Button } from "@/components/ui/button"
 import {
   NavigationMenu,
@@ -15,15 +20,17 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import Link from "next/link"
-
-// Navigation links array to be used in both desktop and mobile menus
-const navigationLinks = [
-  { href: "/rumours", label: "Rumours" },
-  { href: "/lineup", label: "Lineup" },
-  { href: "/purpose", label: "Purpose" },
-]
+import { useI18n } from "@/lib/i18n/context"
 
 export default function Component() {
+  const { t } = useI18n()
+
+  const navigationLinks = [
+    { href: "/rumours", label: t('nav.rumours') },
+    { href: "/lineup", label: t('nav.lineup') },
+    { href: "/purpose", label: t('nav.purpose') },
+  ]
+
   return (
     <header className="border-b px-4 md:px-6">
       <div className="flex h-16 items-center justify-between gap-4">
@@ -107,8 +114,14 @@ export default function Component() {
         {/* Right side */}
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            {/* Info menu */}
-            <InfoMenu />
+            {/* Social buttons */}
+            <SocialButtons />
+            {/* Theme switcher */}
+            <ThemeSwitcher />
+            {/* Language switcher */}
+            <LanguageSwitcher />
+            {/* Add rumour button */}
+            <AddRumourButton />
             {/* Notification */}
             <NotificationMenu />
           </div>

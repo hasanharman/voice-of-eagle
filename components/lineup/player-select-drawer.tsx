@@ -1,7 +1,7 @@
-// components/PlayerSelectionDrawer.tsx
-"use client";
+"use client"
 
 import { useState, useMemo } from "react";
+
 import {
   Drawer,
   DrawerContent,
@@ -15,6 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Search, X, Star } from "lucide-react";
 import { usePlayerStore, Player } from "@/lib/store/player.store";
+import { useI18n } from "@/lib/i18n/context";
 
 interface PlayerSelectionDrawerProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ export default function PlayerSelectionDrawer({
   onClose,
   positionId,
 }: PlayerSelectionDrawerProps) {
+  const { t } = useI18n()
   const {
     availablePlayers,
     updateLineupPlayer,
@@ -69,24 +71,24 @@ export default function PlayerSelectionDrawer({
   return (
     <Drawer open={isOpen} onOpenChange={onClose}>
       <DrawerContent className="max-h-[85vh]">
-        <DrawerHeader className="border-b border-gray-100">
+        <DrawerHeader className="border-b border-border">
           <DrawerTitle className="text-lg font-semibold">
-            Select Player
+            {t('lineup.selectPlayer')}
           </DrawerTitle>
           <DrawerDescription>
-            Choose a player for this position
+            {t('lineup.choosePlayerForPosition')}
           </DrawerDescription>
         </DrawerHeader>
 
         <div className="px-4 pb-4 flex-1 overflow-hidden">
           {/* Search */}
           <div className="relative mb-4 mt-4">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
-              placeholder="Search players..."
+              placeholder={t('lineup.searchPlayers')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-gray-50 border-gray-200"
+              className="pl-10 bg-muted border-border"
             />
           </div>
 
@@ -108,7 +110,7 @@ export default function PlayerSelectionDrawer({
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-semibold text-sm text-gray-800">
+                    <p className="font-semibold text-sm text-foreground">
                       {currentPlayer.name}
                     </p>
                     <div className="flex items-center gap-2 mt-1">
@@ -118,7 +120,7 @@ export default function PlayerSelectionDrawer({
                       <Badge variant="outline" className="text-xs">
                         {currentPlayer.rating}
                       </Badge>
-                      <span className="text-xs text-gray-600">
+                      <span className="text-xs text-muted-foreground">
                         {currentPlayer.nationality}
                       </span>
                     </div>
@@ -149,8 +151,8 @@ export default function PlayerSelectionDrawer({
                     isSelected
                       ? "bg-blue-100 border-blue-300 shadow-md"
                       : inLineup
-                      ? "bg-gray-100 border-gray-200 opacity-50 cursor-not-allowed"
-                      : "bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm"
+                      ? "bg-muted border-border opacity-50 cursor-not-allowed"
+                      : "bg-background border-border hover:bg-muted hover:border-border hover:shadow-sm"
                   }`}
                   onClick={() => !inLineup && handlePlayerSelect(player)}
                 >
@@ -166,7 +168,7 @@ export default function PlayerSelectionDrawer({
                     </Avatar>
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
-                        <h3 className="font-medium text-sm text-gray-800">
+                        <h3 className="font-medium text-sm text-foreground">
                           {player.name}
                         </h3>
                         <div className="flex items-center gap-2">
@@ -187,18 +189,18 @@ export default function PlayerSelectionDrawer({
                         <Badge variant="outline" className="text-xs">
                           {player.position}
                         </Badge>
-                        <span className="text-xs text-gray-600">
+                        <span className="text-xs text-muted-foreground">
                           {player.nationality}
                         </span>
-                        <span className="text-xs text-gray-400">•</span>
-                        <span className="text-xs text-gray-600">
+                        <span className="text-xs text-muted-foreground">•</span>
+                        <span className="text-xs text-muted-foreground">
                           {player.club}
                         </span>
                         {inLineup && (
                           <>
-                            <span className="text-xs text-gray-400">•</span>
+                            <span className="text-xs text-muted-foreground">•</span>
                             <span className="text-xs text-red-600 font-medium">
-                              In lineup
+                              {t('lineup.inLineup')}
                             </span>
                           </>
                         )}
@@ -210,10 +212,10 @@ export default function PlayerSelectionDrawer({
             })}
 
             {filteredPlayers.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-muted-foreground">
                 <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                <p>No players found</p>
-                <p className="text-sm">Try adjusting your search</p>
+                <p>{t('lineup.noPlayersFound')}</p>
+                <p className="text-sm">{t('lineup.tryAdjustingSearch')}</p>
               </div>
             )}
           </div>

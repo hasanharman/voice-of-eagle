@@ -8,12 +8,14 @@ import { useAuth } from "@/hooks/useAuth";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { SignupDialog } from "@/components/auth/signup-dialog";
+import { useI18n } from "@/lib/i18n/context";
 
 interface VotingButtonsProps {
   rumour: RumourWithScores;
 }
 
 export function VotingButtons({ rumour }: VotingButtonsProps) {
+  const { t } = useI18n();
   const { user } = useAuth();
   const [isVoting, setIsVoting] = useState(false);
   const [userVote, setUserVote] = useState<"upvote" | "downvote" | null>(null);
@@ -64,7 +66,7 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
     const now = Date.now();
     
     if (lastVoteTime && now - parseInt(lastVoteTime) < 1000) {
-      toast.error("Please wait before voting again");
+      toast.error(t('voting.pleaseWaitBeforeVoting'));
       return;
     }
 
@@ -80,7 +82,7 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
 
         if (error) throw error;
         setUserVote(null);
-        toast.success("Vote removed");
+        toast.success(t('voting.voteRemoved'));
       } else {
         const { error } = await supabase.from("community_votes").upsert({
           rumour_id: rumour.id,
@@ -91,14 +93,14 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
 
         if (error) throw error;
         setUserVote(voteType);
-        toast.success(`${voteType === "upvote" ? "Upvoted" : "Downvoted"}!`);
+        toast.success(`${voteType === "upvote" ? t('voting.upvoted') : t('voting.downvoted')}!`);
       }
 
       localStorage.setItem(rateLimitKey, now.toString());
       window.location.reload();
     } catch (error) {
       console.error("Error voting:", error);
-      toast.error("Failed to vote. Please try again.");
+      toast.error(t('voting.failedToVote'));
     } finally {
       setIsVoting(false);
     }

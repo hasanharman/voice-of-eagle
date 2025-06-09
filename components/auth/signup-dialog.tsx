@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
+import { useI18n } from "@/lib/i18n/context";
 
 interface SignupDialogProps {
   open: boolean;
@@ -21,6 +22,7 @@ interface SignupDialogProps {
 }
 
 export function SignupDialog({ open, onOpenChange }: SignupDialogProps) {
+  const { t } = useI18n();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +32,7 @@ export function SignupDialog({ open, onOpenChange }: SignupDialogProps) {
     e.preventDefault();
     
     if (!email || !password) {
-      toast.error("Please fill in all fields");
+      toast.error(t('auth.pleaseFilAllFields'));
       return;
     }
 
@@ -47,13 +49,13 @@ export function SignupDialog({ open, onOpenChange }: SignupDialogProps) {
 
       if (error) throw error;
 
-      toast.success("Check your email for the confirmation link!");
+      toast.success(t('auth.checkEmailConfirmation'));
       onOpenChange(false);
       setEmail("");
       setPassword("");
     } catch (error: any) {
       console.error("Error signing up:", error);
-      toast.error(error.message || "Failed to sign up");
+      toast.error(error.message || t('auth.failedToSignUp'));
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +63,7 @@ export function SignupDialog({ open, onOpenChange }: SignupDialogProps) {
 
   const handleSignin = async () => {
     if (!email || !password) {
-      toast.error("Please fill in all fields");
+      toast.error(t('auth.pleaseFilAllFields'));
       return;
     }
 
@@ -75,13 +77,13 @@ export function SignupDialog({ open, onOpenChange }: SignupDialogProps) {
 
       if (error) throw error;
 
-      toast.success("Signed in successfully!");
+      toast.success(t('auth.signedInSuccessfully'));
       onOpenChange(false);
       setEmail("");
       setPassword("");
     } catch (error: any) {
       console.error("Error signing in:", error);
-      toast.error(error.message || "Failed to sign in");
+      toast.error(error.message || t('auth.failedToSignIn'));
     } finally {
       setIsLoading(false);
     }
@@ -91,37 +93,37 @@ export function SignupDialog({ open, onOpenChange }: SignupDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Sign up to vote</DialogTitle>
+          <DialogTitle>{t('auth.signUpToVote')}</DialogTitle>
           <DialogDescription>
-            Create an account or sign in to vote on transfer rumours and set priorities.
+            {t('auth.signUpDescription')}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSignup} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t('auth.email')}</Label>
             <Input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
+              placeholder={t('auth.enterEmail')}
               required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{t('auth.password')}</Label>
             <Input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
+              placeholder={t('auth.enterPassword')}
               required
             />
           </div>
           <DialogFooter className="flex-col space-y-2 sm:flex-col sm:space-x-0">
             <Button type="submit" disabled={isLoading} className="w-full">
-              {isLoading ? "Creating account..." : "Sign up"}
+              {isLoading ? t('auth.creatingAccount') : t('auth.signUp')}
             </Button>
             <Button 
               type="button" 
@@ -130,7 +132,7 @@ export function SignupDialog({ open, onOpenChange }: SignupDialogProps) {
               disabled={isLoading}
               className="w-full"
             >
-              {isLoading ? "Signing in..." : "Already have an account? Sign in"}
+              {isLoading ? t('auth.signingIn') : t('auth.alreadyHaveAccount')}
             </Button>
           </DialogFooter>
         </form>

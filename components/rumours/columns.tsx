@@ -191,7 +191,7 @@ export const columns: ColumnDef<RumourWithScores>[] = [
         active: "bg-green-100 text-green-800",
         completed: "bg-blue-100 text-blue-800",
         rejected: "bg-red-100 text-red-800",
-        expired: "bg-gray-100 text-gray-800",
+        expired: "bg-muted text-muted-foreground",
       };
 
       return (

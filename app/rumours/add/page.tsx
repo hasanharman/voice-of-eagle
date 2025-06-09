@@ -12,8 +12,10 @@ import { X, Plus } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
+import { useI18n } from "@/lib/i18n/context";
 
 export default function AddRumourPage() {
+  const { t } = useI18n();
   const { user, isAdmin, loading } = useAuth();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,7 +39,7 @@ export default function AddRumourPage() {
   const [newPosition, setNewPosition] = useState("");
 
   if (loading) {
-    return <div className="flex justify-center items-center h-64">Loading...</div>;
+    return <div className="flex justify-center items-center h-64">{t('common.loading')}</div>;
   }
 
   if (!user) {
@@ -51,7 +53,7 @@ export default function AddRumourPage() {
         <Card>
           <CardContent className="pt-6">
             <p className="text-center text-muted-foreground">
-              You don't have permission to add rumours. Only admins can add new rumours.
+              {t('rumours.noPermission')}
             </p>
           </CardContent>
         </Card>
@@ -84,7 +86,7 @@ export default function AddRumourPage() {
     e.preventDefault();
     
     if (!formData.player_name.trim()) {
-      toast.error("Player name is required");
+      toast.error(t('rumours.playerNameRequired'));
       return;
     }
 
@@ -115,11 +117,11 @@ export default function AddRumourPage() {
 
       if (error) throw error;
 
-      toast.success("Rumour added successfully!");
+      toast.success(t('rumours.rumourAddedSuccessfully'));
       router.push("/rumours");
     } catch (error) {
       console.error("Error adding rumour:", error);
-      toast.error("Failed to add rumour. Please try again.");
+      toast.error(t('rumours.failedToAddRumour'));
     } finally {
       setIsSubmitting(false);
     }
@@ -129,45 +131,45 @@ export default function AddRumourPage() {
     <div className="container mx-auto px-4 py-8">
       <Card>
         <CardHeader>
-          <CardTitle>Add New Transfer Rumour</CardTitle>
+          <CardTitle>{t('rumours.addNewRumour')}</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="player_name">Player Name *</Label>
+                <Label htmlFor="player_name">{t('rumours.playerName')} *</Label>
                 <Input
                   id="player_name"
                   value={formData.player_name}
                   onChange={(e) => handleInputChange("player_name", e.target.value)}
-                  placeholder="Enter player name"
+                  placeholder={t('rumours.enterPlayerName')}
                   required
                 />
               </div>
 
               <div>
-                <Label htmlFor="age">Age</Label>
+                <Label htmlFor="age">{t('rumours.age')}</Label>
                 <Input
                   id="age"
                   type="number"
                   value={formData.age}
                   onChange={(e) => handleInputChange("age", e.target.value)}
-                  placeholder="Enter age"
+                  placeholder={t('rumours.enterAge')}
                 />
               </div>
 
               <div>
-                <Label htmlFor="nationality">Nationality</Label>
+                <Label htmlFor="nationality">{t('rumours.nationality')}</Label>
                 <Input
                   id="nationality"
                   value={formData.nationality}
                   onChange={(e) => handleInputChange("nationality", e.target.value)}
-                  placeholder="Enter nationality"
+                  placeholder={t('rumours.enterNationality')}
                 />
               </div>
 
               <div>
-                <Label htmlFor="nationality_code">Nationality Code</Label>
+                <Label htmlFor="nationality_code">{t('rumours.nationalityCode')}</Label>
                 <Input
                   id="nationality_code"
                   value={formData.nationality_code}
@@ -177,54 +179,54 @@ export default function AddRumourPage() {
               </div>
 
               <div>
-                <Label htmlFor="current_team">Current Team</Label>
+                <Label htmlFor="current_team">{t('rumours.currentTeam')}</Label>
                 <Input
                   id="current_team"
                   value={formData.current_team}
                   onChange={(e) => handleInputChange("current_team", e.target.value)}
-                  placeholder="Enter current team"
+                  placeholder={t('rumours.enterCurrentTeam')}
                 />
               </div>
 
               <div>
-                <Label htmlFor="current_league">Current League</Label>
+                <Label htmlFor="current_league">{t('rumours.currentLeague')}</Label>
                 <Input
                   id="current_league"
                   value={formData.current_league}
                   onChange={(e) => handleInputChange("current_league", e.target.value)}
-                  placeholder="Enter current league"
+                  placeholder={t('rumours.enterCurrentLeague')}
                 />
               </div>
 
               <div>
-                <Label htmlFor="market_value">Market Value (€)</Label>
+                <Label htmlFor="market_value">{t('rumours.marketValue')}</Label>
                 <Input
                   id="market_value"
                   type="number"
                   value={formData.market_value}
                   onChange={(e) => handleInputChange("market_value", e.target.value)}
-                  placeholder="Enter market value in euros"
+                  placeholder={t('rumours.enterMarketValue')}
                 />
               </div>
 
               <div>
-                <Label htmlFor="source_name">Source Name</Label>
+                <Label htmlFor="source_name">{t('rumours.sourceName')}</Label>
                 <Input
                   id="source_name"
                   value={formData.source_name}
                   onChange={(e) => handleInputChange("source_name", e.target.value)}
-                  placeholder="Enter source name"
+                  placeholder={t('rumours.enterSourceName')}
                 />
               </div>
             </div>
 
             <div>
-              <Label>Positions</Label>
+              <Label>{t('rumours.positions')}</Label>
               <div className="flex gap-2 mb-2">
                 <Input
                   value={newPosition}
                   onChange={(e) => setNewPosition(e.target.value)}
-                  placeholder="Add position (e.g., ST, CM, CB)"
+                  placeholder={t('rumours.addPosition')}
                   onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addPosition())}
                 />
                 <Button type="button" onClick={addPosition} size="sm">
@@ -245,44 +247,44 @@ export default function AddRumourPage() {
             </div>
 
             <div>
-              <Label htmlFor="source_url">Source URL</Label>
+              <Label htmlFor="source_url">{t('rumours.sourceUrl')}</Label>
               <Input
                 id="source_url"
                 type="url"
                 value={formData.source_url}
                 onChange={(e) => handleInputChange("source_url", e.target.value)}
-                placeholder="Enter source URL"
+                placeholder={t('rumours.enterSourceUrl')}
               />
             </div>
 
             <div>
-              <Label htmlFor="transfermarkt_url">Transfermarkt URL</Label>
+              <Label htmlFor="transfermarkt_url">{t('rumours.transfermarktUrl')}</Label>
               <Input
                 id="transfermarkt_url"
                 type="url"
                 value={formData.transfermarkt_url}
                 onChange={(e) => handleInputChange("transfermarkt_url", e.target.value)}
-                placeholder="Enter Transfermarkt URL"
+                placeholder={t('rumours.enterTransfermarktUrl')}
               />
             </div>
 
             <div>
-              <Label htmlFor="photo_url">Photo URL</Label>
+              <Label htmlFor="photo_url">{t('rumours.photoUrl')}</Label>
               <Input
                 id="photo_url"
                 type="url"
                 value={formData.photo_url}
                 onChange={(e) => handleInputChange("photo_url", e.target.value)}
-                placeholder="Enter photo URL"
+                placeholder={t('rumours.enterPhotoUrl')}
               />
             </div>
 
             <div className="flex gap-4">
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Adding..." : "Add Rumour"}
+                {isSubmitting ? t('rumours.adding') : t('rumours.addRumour')}
               </Button>
               <Button type="button" variant="outline" onClick={() => router.back()}>
-                Cancel
+                {t('rumours.cancel')}
               </Button>
             </div>
           </form>
