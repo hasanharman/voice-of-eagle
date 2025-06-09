@@ -26,6 +26,7 @@ import { formatCurrency, formatDate, getCountryFlag } from "@/lib/utils";
 import { VotingButtons } from "@/components/rumours/voting-buttons";
 import { VideoLinksPopover } from "@/components/rumours/video-links-popover";
 import { PriorityVoting } from "@/components/rumours/priority-voting";
+import { PositionsPopover } from "@/components/rumours/positions-popover";
 
 export const createColumns = (
   t: (key: string) => string
@@ -95,15 +96,7 @@ export const createColumns = (
         const positions = row.original.positions;
         if (!positions || positions.length === 0) return null;
 
-        return (
-          <div className="flex flex-wrap gap-1">
-            {positions.map((position) => (
-              <Badge key={position} variant="secondary" className="text-xs">
-                {position}
-              </Badge>
-            ))}
-          </div>
-        );
+        return <PositionsPopover positions={positions} />;
       },
       filterFn: (row, id, value) => {
         const positions = row.getValue(id) as string[];
@@ -208,6 +201,28 @@ export const createColumns = (
             {status.charAt(0).toUpperCase() + status.slice(1)}
           </Badge>
         );
+      },
+    },
+    {
+      accessorKey: "direction",
+      header: t("table.direction"),
+      cell: ({ row }) => {
+        const direction = row.original.direction;
+        if (!direction) return null;
+
+        const directionColors = {
+          incoming: "bg-blue-100 text-blue-800",
+          outgoing: "bg-orange-100 text-orange-800",
+        };
+
+        return (
+          <Badge className={directionColors[direction]}>
+            {t(`table.${direction}`)}
+          </Badge>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
       },
     },
     {

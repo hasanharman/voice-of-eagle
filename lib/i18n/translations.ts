@@ -77,6 +77,11 @@ export const translations = {
         "Söylenti ekleme izniniz yok. Sadece yöneticiler yeni söylenti ekleyebilir.",
       addRumourGuide: "Söylenti eklemek için DM gönderin",
     },
+    priority: {
+      voteOnPriorityLevel: "Öncelik Seviyesine Oy Ver",
+      priority: "Öncelik",
+      averageScore: "Ortalama Puan",
+    },
     table: {
       player: "Oyuncu",
       nationality: "Uyruk",
@@ -215,6 +220,11 @@ export const translations = {
       noPermission:
         "You don't have permission to add rumours. Only admins can add new rumours.",
       addRumourGuide: "To add a rumour, send a DM",
+    },
+    priority: {
+      voteOnPriorityLevel: "Vote on Priority Level",
+      priority: "Priority",
+      averageScore: "Average Score",
     },
     table: {
       player: "Player",

@@ -62,6 +62,11 @@ export function DataTableToolbar<TData>({
     { label: "Low Priority", value: "low" },
   ];
 
+  const directions = [
+    { label: t("table.incoming"), value: "incoming" },
+    { label: t("table.outgoing"), value: "outgoing" },
+  ];
+
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
@@ -97,6 +102,14 @@ export function DataTableToolbar<TData>({
             column={table.getColumn("calculated_priority_level")}
             title="Priority"
             options={priorities}
+          />
+        )}
+
+        {table.getColumn("direction") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("direction")}
+            title={t("table.direction")}
+            options={directions}
           />
         )}
 
