@@ -9,14 +9,14 @@ export const rumourFormSchema = z.object({
   current_team: z.string().optional(),
   current_league: z.string().optional(),
   market_value: z.number().optional(),
-  source_name: z.string().optional(),
+  direction: z.enum(["incoming", "outgoing"]).default("incoming"),
   source_url: z.string().url().optional().or(z.literal("")),
   transfermarkt_url: z.string().url().optional().or(z.literal("")),
   photo_url: z.string().url().optional().or(z.literal("")),
   video_links: z.array(z.object({
     title: z.string().min(1, "Video title is required"),
     url: z.string().url("Invalid video URL"),
-    platform: z.enum(["youtube", "vimeo", "other"])
+    platform: z.enum(["youtube"])
   })).default([])
 });
 

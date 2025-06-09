@@ -11,7 +11,7 @@ import { useI18n } from "@/lib/i18n/context";
 interface VideoLink {
   title: string;
   url: string;
-  platform: "youtube" | "vimeo" | "other";
+  platform: "youtube";
 }
 
 interface VideoLinksInputProps {
@@ -64,14 +64,12 @@ export function VideoLinksInput({ value, onChange }: VideoLinksInputProps) {
           value={newVideo.url}
           onChange={(e) => setNewVideo({ ...newVideo, url: e.target.value })}
         />
-        <Select value={newVideo.platform} onValueChange={(value) => setNewVideo({ ...newVideo, platform: value as any })}>
+        <Select value={newVideo.platform} onValueChange={(value) => setNewVideo({ ...newVideo, platform: value as "youtube" })}>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="youtube">YouTube</SelectItem>
-            <SelectItem value="vimeo">Vimeo</SelectItem>
-            <SelectItem value="other">Other</SelectItem>
           </SelectContent>
         </Select>
       </div>
