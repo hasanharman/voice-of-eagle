@@ -39,9 +39,9 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: "created_at", desc: true }, // Default sort by latest
   ]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([
-    { id: "direction", value: ["incoming"] }
-  ]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
