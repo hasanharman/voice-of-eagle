@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useMemo } from "react";
 
@@ -28,7 +28,7 @@ export default function PlayerSelectionDrawer({
   onClose,
   positionId,
 }: PlayerSelectionDrawerProps) {
-  const { t } = useI18n()
+  const { t } = useI18n();
   const {
     availablePlayers,
     updateLineupPlayer,
@@ -73,10 +73,10 @@ export default function PlayerSelectionDrawer({
       <DrawerContent className="max-h-[85vh]">
         <DrawerHeader className="border-b border-border">
           <DrawerTitle className="text-lg font-semibold">
-            {t('lineup.selectPlayer')}
+            {t("lineup.selectPlayer")}
           </DrawerTitle>
           <DrawerDescription>
-            {t('lineup.choosePlayerForPosition')}
+            {t("lineup.choosePlayerForPosition")}
           </DrawerDescription>
         </DrawerHeader>
 
@@ -85,7 +85,7 @@ export default function PlayerSelectionDrawer({
           <div className="relative mb-4 mt-4">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
-              placeholder={t('lineup.searchPlayers')}
+              placeholder={t("lineup.searchPlayers")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 bg-muted border-border"
@@ -97,10 +97,11 @@ export default function PlayerSelectionDrawer({
             <div className="mb-4 p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Avatar className="w-12 h-12 border-2 border-blue-300">
+                  <Avatar className="w-12 h-12 border-2">
                     <AvatarImage
                       src={currentPlayer.image}
                       alt={currentPlayer.name}
+                      className="object-contain bg-white"
                     />
                     <AvatarFallback className="bg-blue-500 text-white">
                       {currentPlayer.name
@@ -155,7 +156,11 @@ export default function PlayerSelectionDrawer({
                 >
                   <div className="flex items-center gap-3">
                     <Avatar className="w-12 h-12">
-                      <AvatarImage src={player.image} alt={player.name} />
+                      <AvatarImage
+                        src={player.image}
+                        alt={player.name}
+                        className="object-contain bg-white"
+                      />
                       <AvatarFallback className="bg-gradient-to-br from-gray-400 to-gray-600 text-white">
                         {player.name
                           .split(" ")
@@ -168,7 +173,6 @@ export default function PlayerSelectionDrawer({
                         <h3 className="font-medium text-sm text-foreground">
                           {player.name}
                         </h3>
-
                       </div>
                       <div className="flex items-center gap-2 mt-1">
                         <Badge variant="outline" className="text-xs">
@@ -183,9 +187,11 @@ export default function PlayerSelectionDrawer({
                         </span>
                         {inLineup && (
                           <>
-                            <span className="text-xs text-muted-foreground">•</span>
+                            <span className="text-xs text-muted-foreground">
+                              •
+                            </span>
                             <span className="text-xs text-red-600 font-medium">
-                              {t('lineup.inLineup')}
+                              {t("lineup.inLineup")}
                             </span>
                           </>
                         )}
@@ -199,8 +205,8 @@ export default function PlayerSelectionDrawer({
             {filteredPlayers.length === 0 && (
               <div className="text-center py-8 text-muted-foreground">
                 <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                <p>{t('lineup.noPlayersFound')}</p>
-                <p className="text-sm">{t('lineup.tryAdjustingSearch')}</p>
+                <p>{t("lineup.noPlayersFound")}</p>
+                <p className="text-sm">{t("lineup.tryAdjustingSearch")}</p>
               </div>
             )}
           </div>
