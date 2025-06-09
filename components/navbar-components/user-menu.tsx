@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   BoltIcon,
@@ -7,14 +7,10 @@ import {
   LogOutIcon,
   PinIcon,
   UserPenIcon,
-} from "lucide-react"
+} from "lucide-react";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,34 +19,33 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { useAuth } from "@/hooks/useAuth"
-import { createClient } from "@/lib/supabase/client"
-import { useRouter } from "next/navigation"
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/hooks/useAuth";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import { useI18n } from "@/lib/i18n/context";
 
 export default function UserMenu() {
-  const { user, loading } = useAuth()
-  const router = useRouter()
+    const { t } = useI18n()
+  const { user, loading } = useAuth();
+  const router = useRouter();
 
   const handleLogout = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push('/auth/login')
-  }
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/auth/login");
+  };
 
   if (loading) {
-    return <div className="h-8 w-8 animate-pulse bg-muted rounded-full" />
+    return <div className="h-8 w-8 animate-pulse bg-muted rounded-full" />;
   }
 
   if (!user) {
     return (
-      <Button 
-        variant="outline" 
-        onClick={() => router.push('/auth/login')}
-      >
-        Sign In
+      <Button variant="outline" onClick={() => router.push("/auth/login")}>
+        {t("auth.signIn")}
       </Button>
-    )
+    );
   }
   return (
     <DropdownMenu>
@@ -58,14 +53,16 @@ export default function UserMenu() {
         <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
           <Avatar>
             <AvatarImage src="./avatar.jpg" alt="Profile image" />
-            <AvatarFallback>{user.email?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
+            <AvatarFallback>
+              {user.email?.charAt(0).toUpperCase() || "U"}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-64" align="end">
         <DropdownMenuLabel className="flex min-w-0 flex-col">
           <span className="text-foreground truncate text-sm font-medium">
-            {user.user_metadata?.full_name || 'User'}
+            {user.user_metadata?.full_name || "User"}
           </span>
           <span className="text-muted-foreground truncate text-xs font-normal">
             {user.email}
@@ -104,5 +101,5 @@ export default function UserMenu() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

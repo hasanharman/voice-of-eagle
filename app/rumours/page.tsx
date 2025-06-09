@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { DataTable } from "@/components/rumours/data-table";
-import { columns } from "@/components/rumours/columns";
+import { createColumns } from "@/components/rumours/columns";
 import { RumourWithScores } from "@/lib/types/rumours.types";
 import { AdminAddButton } from "@/components/rumours/admin-add-button";
 import { useI18n } from "@/lib/i18n/context";
@@ -93,5 +93,5 @@ function RumoursTable() {
     );
   }
 
-  return <DataTable columns={columns} data={rumours} />;
+  return <DataTable columns={createColumns(t)} data={rumours} />;
 }

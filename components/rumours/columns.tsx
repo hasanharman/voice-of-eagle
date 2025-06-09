@@ -10,6 +10,8 @@ import {
   ThumbsUp,
   ThumbsDown,
   Play,
+  ArrowDown,
+  ArrowUp,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -25,7 +27,9 @@ import { VotingButtons } from "@/components/rumours/voting-buttons";
 import { VideoLinksPopover } from "@/components/rumours/video-links-popover";
 import { PriorityVoting } from "@/components/rumours/priority-voting";
 
-export const columns: ColumnDef<RumourWithScores>[] = [
+export const createColumns = (t: (key: string) => string): ColumnDef<RumourWithScores>[] => {
+  
+  return [
   {
     accessorKey: "photo_url",
     header: "",
@@ -49,7 +53,7 @@ export const columns: ColumnDef<RumourWithScores>[] = [
   },
   {
     accessorKey: "player_name",
-    header: "Player",
+    header: t('table.player'),
     cell: ({ row }) => {
       const player = row.original;
       return (
@@ -64,7 +68,7 @@ export const columns: ColumnDef<RumourWithScores>[] = [
   },
   {
     accessorKey: "nationality",
-    header: "Nationality",
+    header: t('table.nationality'),
     cell: ({ row }) => {
       const player = row.original;
       if (!player.nationality || !player.nationality_code) return null;
@@ -81,7 +85,7 @@ export const columns: ColumnDef<RumourWithScores>[] = [
   },
   {
     accessorKey: "positions",
-    header: "Positions",
+    header: t('table.positions'),
     cell: ({ row }) => {
       const positions = row.original.positions;
       if (!positions || positions.length === 0) return null;
@@ -103,7 +107,7 @@ export const columns: ColumnDef<RumourWithScores>[] = [
   },
   {
     accessorKey: "current_team",
-    header: "Current Team",
+    header: t('table.currentTeam'),
     cell: ({ row }) => {
       const player = row.original;
       return (
@@ -117,8 +121,29 @@ export const columns: ColumnDef<RumourWithScores>[] = [
     },
   },
   {
+    accessorKey: "direction",
+    header: t('table.direction'),
+    cell: ({ row }) => {
+      const direction = row.original.direction;
+      if (!direction) return <span className="text-muted-foreground">-</span>;
+
+      return (
+        <div className="flex items-center gap-2">
+          {direction === "incoming" ? (
+            <ArrowDown className="h-4 w-4 text-green-600" />
+          ) : (
+            <ArrowUp className="h-4 w-4 text-blue-600" />
+          )}
+          <span className="text-sm">
+            {direction === "incoming" ? t('table.incoming') : t('table.outgoing')}
+          </span>
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "market_value",
-    header: "Market Value",
+    header: t('table.marketValue'),
     cell: ({ row }) => {
       const value = row.original.market_value;
       if (!value) return <span className="text-muted-foreground">-</span>;
@@ -132,7 +157,7 @@ export const columns: ColumnDef<RumourWithScores>[] = [
   },
   {
     accessorKey: "calculated_priority_level",
-    header: "Priority",
+    header: t('table.priority'),
     cell: ({ row }) => {
       const rumour = row.original;
       return <PriorityVoting rumour={rumour} />;
@@ -140,7 +165,7 @@ export const columns: ColumnDef<RumourWithScores>[] = [
   },
   {
     accessorKey: "community_approval",
-    header: "Community",
+    header: t('table.community'),
     cell: ({ row }) => {
       const rumour = row.original;
       return <VotingButtons rumour={rumour} />;
@@ -148,7 +173,7 @@ export const columns: ColumnDef<RumourWithScores>[] = [
   },
   {
     accessorKey: "source_name",
-    header: "Source",
+    header: t('table.source'),
     cell: ({ row }) => {
       const rumour = row.original;
       if (!rumour.source_name) return null;
@@ -173,7 +198,7 @@ export const columns: ColumnDef<RumourWithScores>[] = [
   },
   {
     accessorKey: "created_at",
-    header: "Date Added",
+    header: t('table.dateAdded'),
     cell: ({ row }) => {
       return (
         <span className="text-sm text-muted-foreground">
@@ -184,7 +209,7 @@ export const columns: ColumnDef<RumourWithScores>[] = [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: t('table.status'),
     cell: ({ row }) => {
       const status = row.original.status;
       const statusColors = {
@@ -203,7 +228,7 @@ export const columns: ColumnDef<RumourWithScores>[] = [
   },
   {
     accessorKey: "video_links",
-    header: "Videos",
+    header: t('table.videos'),
     cell: ({ row }) => {
       const videoLinks = row.original.video_links;
       if (!videoLinks || videoLinks.length === 0) return null;
@@ -214,7 +239,7 @@ export const columns: ColumnDef<RumourWithScores>[] = [
   },
   {
     id: "actions",
-    header: "Actions",
+    header: t('table.actions'),
     cell: ({ row }) => {
       const rumour = row.original;
 
@@ -257,3 +282,4 @@ export const columns: ColumnDef<RumourWithScores>[] = [
     enableHiding: false,
   },
 ];
+};
