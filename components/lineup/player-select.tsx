@@ -73,7 +73,8 @@ export default function PlayerSelectionResponsive({
             player.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
             player.nationality.toLowerCase().includes(searchTerm.toLowerCase());
           const matchesPosition = !targetPosition || isPositionCompatible(player.position, targetPosition);
-          return matchesSearch && matchesPosition;
+          const notInLineup = !isPlayerInLineup(player.id);
+          return matchesSearch && matchesPosition && notInLineup;
         }
       )
       .sort((a, b) => b.rating - a.rating);

@@ -428,8 +428,133 @@ interface PlayerState {
 export const usePlayerStore = create<PlayerState>()(
   devtools(
     (set, get) => ({
-      availablePlayers: importBesiktasPlayers(besiktasData as BesiktasData),
-      lineupPlayers: [],
+      availablePlayers: importBesiktasPlayers(besiktasData as BesiktasData).filter(player => 
+        !["mert-gunok", "arthur-masuaku", "gabriel-paulista", "felix-uduokhai", "jonas-svensson", 
+          "gedson-fernandes", "alex-oxlade-chamberlain", "rafa-silva", "ernest-muci", "ciro-immobile", "milot-rashica"].includes(player.id)
+      ),
+      lineupPlayers: [
+        {
+          id: "mert-gunok",
+          name: "Mert Günok",
+          position: "GK",
+          rating: 82,
+          image: "/api/placeholder/150/150",
+          nationality: "Turkey",
+          club: "Beşiktaş",
+          positionId: "gk",
+          fieldPosition: { x: 50, y: 85 }
+        },
+        {
+          id: "arthur-masuaku",
+          name: "Arthur Masuaku",
+          position: "LB",
+          rating: 78,
+          image: "/api/placeholder/150/150",
+          nationality: "France",
+          club: "Beşiktaş",
+          positionId: "lb",
+          fieldPosition: { x: 85, y: 65 }
+        },
+        {
+          id: "gabriel-paulista",
+          name: "Gabriel Paulista",
+          position: "CB",
+          rating: 80,
+          image: "/api/placeholder/150/150",
+          nationality: "Brazil",
+          club: "Beşiktaş",
+          positionId: "cb1",
+          fieldPosition: { x: 35, y: 65 }
+        },
+        {
+          id: "felix-uduokhai",
+          name: "Felix Uduokhai",
+          position: "CB",
+          rating: 79,
+          image: "/api/placeholder/150/150",
+          nationality: "Germany",
+          club: "Beşiktaş",
+          positionId: "cb2",
+          fieldPosition: { x: 65, y: 65 }
+        },
+        {
+          id: "jonas-svensson",
+          name: "Jonas Svensson",
+          position: "RB",
+          rating: 77,
+          image: "/api/placeholder/150/150",
+          nationality: "Norway",
+          club: "Beşiktaş",
+          positionId: "rb",
+          fieldPosition: { x: 15, y: 65 }
+        },
+        {
+          id: "gedson-fernandes",
+          name: "Gedson Fernandes",
+          position: "CM",
+          rating: 81,
+          image: "/api/placeholder/150/150",
+          nationality: "Portugal",
+          club: "Beşiktaş",
+          positionId: "cm1",
+          fieldPosition: { x: 30, y: 45 }
+        },
+        {
+          id: "alex-oxlade-chamberlain-2",
+          name: "Alex Oxlade-Chamberlain",
+          position: "CM",
+          rating: 83,
+          image: "/api/placeholder/150/150",
+          nationality: "England",
+          club: "Beşiktaş",
+          positionId: "cm2",
+          fieldPosition: { x: 70, y: 45 }
+        },
+        {
+          id: "rafa-silva",
+          name: "Rafa Silva",
+          position: "CAM",
+          rating: 85,
+          image: "/api/placeholder/150/150",
+          nationality: "Portugal",
+          club: "Beşiktaş",
+          positionId: "cam",
+          fieldPosition: { x: 50, y: 35 }
+        },
+        {
+          id: "ernest-muci",
+          name: "Ernest Muci",
+          position: "LW",
+          rating: 76,
+          image: "/api/placeholder/150/150",
+          nationality: "Albania",
+          club: "Beşiktaş",
+          positionId: "lw",
+          fieldPosition: { x: 15, y: 20 }
+        },
+        {
+          id: "ciro-immobile",
+          name: "Ciro Immobile",
+          position: "ST",
+          rating: 87,
+          image: "/api/placeholder/150/150",
+          nationality: "Italy",
+          club: "Beşiktaş",
+          positionId: "st",
+          fieldPosition: { x: 50, y: 15 }
+        },
+        {
+          id: "milot-rashica",
+          name: "Milot Rashica",
+          position: "RW",
+          rating: 80,
+          image: "/api/placeholder/150/150",
+          nationality: "Kosovo",
+          club: "Beşiktaş",
+          positionId: "rw",
+          fieldPosition: { x: 85, y: 20 }
+        }
+      ],
       substituteePlayers: [],
       selectedFormation: "4-3-3",
       draggedPlayer: null,

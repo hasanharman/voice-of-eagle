@@ -89,17 +89,21 @@ export function getAreaBasedPosition(fieldPosition: { x: number; y: number }): s
   const { x, y } = fieldPosition;
   
   if (y > 80) return "GK";
+  
   if (y > 55 && y <= 75) {
-    if (x < 30) return "LB";
-    if (x > 70) return "RB";
+    if (x < 25) return "LB";
+    if (x > 75) return "RB";
     return "CB";
   }
-  if (y > 35 && y <= 55) {
+  
+  if (y > 30 && y <= 55) {
+    if (y <= 40 && x >= 45 && x <= 55) return "CAM"; // CAM position
     if (x < 25) return "LM";
     if (x > 75) return "RM";
     return "CM";
   }
-  if (y <= 35) {
+  
+  if (y <= 30) {
     if (x < 25) return "LW";
     if (x > 75) return "RW";
     return "ST";
