@@ -81,8 +81,7 @@ export default function AddRumourPage() {
         ...data,
         market_value: data.market_value ? data.market_value * 100 : null,
         created_by: user?.id || "dev-user",
-        status: "active",
-        direction: "incoming"
+        status: "active"
       });
 
       if (error) throw error;
@@ -228,10 +227,24 @@ export default function AddRumourPage() {
 
               <FormField
                 control={form.control}
-                name="current_team"
+                name="from_team"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("forms.currentTeam")}</FormLabel>
+                    <FormLabel>{t("forms.fromTeam")}</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="to_team"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("forms.toTeam")}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -272,28 +285,6 @@ export default function AddRumourPage() {
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name="direction"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("forms.direction")}</FormLabel>
-                    <FormControl>
-                      <select
-                        {...field}
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                      >
-                        <option value="incoming">{t("table.incoming")}</option>
-                        <option value="outgoing">{t("table.outgoing")}</option>
-                      </select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-
 
               <FormField
                 control={form.control}

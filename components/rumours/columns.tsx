@@ -104,16 +104,28 @@ export const createColumns = (
       },
     },
     {
-      accessorKey: "current_team",
-      header: t("table.currentTeam"),
+      accessorKey: "from_team",
+      header: t("table.fromTeam"),
       cell: ({ row }) => {
         const player = row.original;
         return (
           <div className="flex flex-col">
-            <span className="font-medium">{player.current_team}</span>
+            <span className="font-medium">{player.from_team}</span>
             <span className="text-sm text-muted-foreground">
               {player?.current_league}
             </span>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "to_team",
+      header: t("table.toTeam"),
+      cell: ({ row }) => {
+        const player = row.original;
+        return (
+          <div className="flex flex-col">
+            <span className="font-medium">{player.to_team}</span>
           </div>
         );
       },
@@ -203,28 +215,7 @@ export const createColumns = (
         );
       },
     },
-    {
-      accessorKey: "direction",
-      header: t("table.direction"),
-      cell: ({ row }) => {
-        const direction = row.original.direction;
-        if (!direction) return null;
 
-        const directionColors = {
-          incoming: "bg-blue-100 text-blue-800",
-          outgoing: "bg-orange-100 text-orange-800",
-        };
-
-        return (
-          <Badge className={directionColors[direction]}>
-            {t(`table.${direction}`)}
-          </Badge>
-        );
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
-    },
     {
       accessorKey: "video_links",
       header: t("table.videos"),

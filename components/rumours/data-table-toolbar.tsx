@@ -62,10 +62,7 @@ export function DataTableToolbar<TData>({
     { label: t("common.low"), value: "low" },
   ];
 
-  const directions = [
-    { label: t("table.incoming"), value: "incoming" },
-    { label: t("table.outgoing"), value: "outgoing" },
-  ];
+
 
   return (
     <div className="flex items-center justify-between">
@@ -105,13 +102,7 @@ export function DataTableToolbar<TData>({
           />
         )}
 
-        {table.getColumn("direction") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("direction")}
-            title={t("table.direction")}
-            options={directions}
-          />
-        )}
+
 
         {isFiltered && (
           <Button
