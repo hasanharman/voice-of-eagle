@@ -47,7 +47,9 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
 
         if (error && error.code !== "PGRST116") {
           console.error("Error fetching user priority:", error);
-        } else if (data) {
+        }
+        
+        if (data) {
           setUserPriority(data.priority_level);
         }
       } catch (error) {

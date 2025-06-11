@@ -12,6 +12,7 @@ import {
   Play,
   ArrowDown,
   ArrowUp,
+  ArrowRight,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -104,28 +105,22 @@ export const createColumns = (
       },
     },
     {
-      accessorKey: "from_team",
-      header: t("table.fromTeam"),
+      accessorKey: "transfer_info",
+      header: t("table.transfer"),
       cell: ({ row }) => {
         const player = row.original;
         return (
-          <div className="flex flex-col">
-            <span className="font-medium">{player.from_team}</span>
-            <span className="text-sm text-muted-foreground">
-              {player?.current_league}
-            </span>
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "to_team",
-      header: t("table.toTeam"),
-      cell: ({ row }) => {
-        const player = row.original;
-        return (
-          <div className="flex flex-col">
-            <span className="font-medium">{player.to_team}</span>
+          <div className="flex flex-col space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="font-medium">{player.from_team}</span>
+              <ArrowRight className="h-4 w-4 text-muted-foreground" />
+              <span className="font-medium">{player.to_team}</span>
+            </div>
+            {player.current_league && (
+              <span className="text-sm text-muted-foreground">
+                {player.current_league}
+              </span>
+            )}
           </div>
         );
       },

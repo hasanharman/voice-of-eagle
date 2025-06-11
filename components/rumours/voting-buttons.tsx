@@ -40,7 +40,9 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
 
         if (error && error.code !== "PGRST116") {
           console.error("Error fetching user vote:", error);
-        } else if (data) {
+        }
+        
+        if (data) {
           setUserVote(data.vote_type);
         }
       } catch (error) {
