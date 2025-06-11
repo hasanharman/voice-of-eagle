@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image from "next/image";
 import {
   ExternalLink,
   MoreHorizontal,
@@ -109,6 +110,7 @@ export const createColumns = (
       header: t("table.transfer"),
       cell: ({ row }) => {
         const player = row.original;
+        console.log("player", player);
         return (
           <div className="flex flex-col space-y-1">
             <div className="flex items-center gap-2">
@@ -204,9 +206,7 @@ export const createColumns = (
         };
 
         return (
-          <Badge className={statusColors[status]}>
-            {t(`table.${status}`)}
-          </Badge>
+          <Badge className={statusColors[status]}>{t(`table.${status}`)}</Badge>
         );
       },
     },
@@ -256,9 +256,7 @@ export const createColumns = (
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem asChild>
-                <a href={`/rumours/edit/${rumour.id}`}>
-                  Edit rumour
-                </a>
+                <a href={`/rumours/edit/${rumour.id}`}>Edit rumour</a>
               </DropdownMenuItem>
               <DropdownMenuItem className="text-red-600">
                 Delete rumour
