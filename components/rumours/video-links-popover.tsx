@@ -17,13 +17,15 @@ interface VideoLinksPopoverProps {
 
 // Helper function to extract YouTube video ID from URL
 function getYouTubeVideoId(url: string): string | null {
+  console.log("Extracting YouTube video ID from URL:", url);
+
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/live\/)([^&\n?#]+)/,
     /youtube\.com\/embed\/([^&\n?#]+)/,
   ];
 
   for (const pattern of patterns) {
-    const match = url.match(pattern);
+    const match = url?.match(pattern);
     if (match) return match[1];
   }
 
@@ -57,12 +59,12 @@ export function VideoLinksPopover({ videoLinks }: VideoLinksPopoverProps) {
           <div className="text-sm font-medium">Videos</div>
 
           <div className="flex items-center gap-2 flex-wrap">
-            {videoLinks.map((videoUrl, index) => {
-              const videoId = getYouTubeVideoId(videoUrl as any);
+            {videoLinks.map((video, index) => {
+              const videoId = getYouTubeVideoId(video.url as any);
               const thumbnailUrl = videoId
                 ? getYouTubeThumbnail(videoId)
                 : null;
-              const title = getVideoTitle(videoUrl as any);
+              const title = getVideoTitle(video.url as any);
 
               return (
                 <div
@@ -70,7 +72,7 @@ export function VideoLinksPopover({ videoLinks }: VideoLinksPopoverProps) {
                   className="group relative overflow-hidden rounded-lg border bg-card hover:bg-accent transition-colors"
                 >
                   <Link
-                    href={videoUrl as any}
+                    href={video.url as any}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block"

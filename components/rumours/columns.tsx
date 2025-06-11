@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image from "next/image";
 import {
   ExternalLink,
   MoreHorizontal,
@@ -12,6 +13,7 @@ import {
   Play,
   ArrowDown,
   ArrowUp,
+  ArrowRight,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -104,16 +106,23 @@ export const createColumns = (
       },
     },
     {
-      accessorKey: "current_team",
-      header: t("table.currentTeam"),
+      accessorKey: "transfer_info",
+      header: t("table.transfer"),
       cell: ({ row }) => {
         const player = row.original;
+        console.log("player", player);
         return (
-          <div className="flex flex-col">
-            <span className="font-medium">{player.current_team}</span>
-            <span className="text-sm text-muted-foreground">
-              {player?.current_league}
-            </span>
+          <div className="flex flex-col space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="font-medium">{player.from_team}</span>
+              <ArrowRight className="h-4 w-4 text-muted-foreground" />
+              <span className="font-medium">{player.to_team}</span>
+            </div>
+            {player.current_league && (
+              <span className="text-sm text-muted-foreground">
+                {player.current_league}
+              </span>
+            )}
           </div>
         );
       },
@@ -197,34 +206,11 @@ export const createColumns = (
         };
 
         return (
-          <Badge className={statusColors[status]}>
-            {t(`table.${status}`)}
-          </Badge>
+          <Badge className={statusColors[status]}>{t(`table.${status}`)}</Badge>
         );
       },
     },
-    {
-      accessorKey: "direction",
-      header: t("table.direction"),
-      cell: ({ row }) => {
-        const direction = row.original.direction;
-        if (!direction) return null;
 
-        const directionColors = {
-          incoming: "bg-blue-100 text-blue-800",
-          outgoing: "bg-orange-100 text-orange-800",
-        };
-
-        return (
-          <Badge className={directionColors[direction]}>
-            {t(`table.${direction}`)}
-          </Badge>
-        );
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
-    },
     {
       accessorKey: "video_links",
       header: t("table.videos"),
@@ -270,9 +256,7 @@ export const createColumns = (
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem asChild>
-                <a href={`/rumours/edit/${rumour.id}`}>
-                  Edit rumour
-                </a>
+                <a href={`/rumours/edit/${rumour.id}`}>Edit rumour</a>
               </DropdownMenuItem>
               <DropdownMenuItem className="text-red-600">
                 Delete rumour

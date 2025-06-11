@@ -68,8 +68,8 @@ export default function UserMenu() {
             {user.email}
           </span>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
+        {/* <DropdownMenuSeparator /> */}
+        {/* <DropdownMenuGroup>
           <DropdownMenuItem>
             <BoltIcon size={16} className="opacity-60" aria-hidden="true" />
             <span>Option 1</span>
@@ -82,9 +82,9 @@ export default function UserMenu() {
             <BookOpenIcon size={16} className="opacity-60" aria-hidden="true" />
             <span>Option 3</span>
           </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
+        </DropdownMenuGroup> */}
+        {/* <DropdownMenuSeparator /> */}
+        {/* <DropdownMenuGroup>
           <DropdownMenuItem>
             <PinIcon size={16} className="opacity-60" aria-hidden="true" />
             <span>Option 4</span>
@@ -93,7 +93,7 @@ export default function UserMenu() {
             <UserPenIcon size={16} className="opacity-60" aria-hidden="true" />
             <span>Option 5</span>
           </DropdownMenuItem>
-        </DropdownMenuGroup>
+        </DropdownMenuGroup> */}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>
           <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />

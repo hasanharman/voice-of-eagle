@@ -5,9 +5,9 @@ export interface TransferRumour {
   nationality: string | null;
   nationality_code: string | null;
   positions: string[] | null;
-  current_team: string | null;
+  from_team: string | null;
+  to_team: string | null;
   current_league: string | null;
-  direction: "incoming" | "outgoing" | null;
   market_value: number | null; // In cents
   source_name: string | null;
   source_url: string | null;

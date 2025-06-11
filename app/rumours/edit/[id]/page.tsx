@@ -66,10 +66,10 @@ export default function EditRumourPage() {
         nationality: data.nationality,
         nationality_code: data.nationality_code,
         positions: data.positions || [],
-        current_team: data.current_team,
+        from_team: data.from_team,
+        to_team: data.to_team,
         current_league: data.current_league,
         market_value: data.market_value ? data.market_value / 100 : undefined,
-        direction: data.direction || "incoming",
         source_url: data.source_url,
         transfermarkt_url: data.transfermarkt_url,
         photo_url: data.photo_url,
@@ -261,10 +261,24 @@ export default function EditRumourPage() {
 
               <FormField
                 control={form.control}
-                name="current_team"
+                name="from_team"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("forms.currentTeam")}</FormLabel>
+                    <FormLabel>{t("forms.fromTeam")}</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="to_team"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("forms.toTeam")}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -305,28 +319,6 @@ export default function EditRumourPage() {
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name="direction"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("forms.direction")}</FormLabel>
-                    <FormControl>
-                      <select
-                        {...field}
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                      >
-                        <option value="incoming">{t("table.incoming")}</option>
-                        <option value="outgoing">{t("table.outgoing")}</option>
-                      </select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-
 
               <FormField
                 control={form.control}
