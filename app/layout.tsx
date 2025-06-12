@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Edu_AU_VIC_WA_NT_Hand } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
+
 import "./globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
@@ -98,6 +100,7 @@ export default function RootLayout({
           </I18nProvider>
         </ThemeProvider>
       </body>
+      <GoogleAnalytics gaId="G-3YSWM1MXZK" />
     </html>
   );
 }
