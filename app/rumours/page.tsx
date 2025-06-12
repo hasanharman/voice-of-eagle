@@ -13,34 +13,36 @@ function useRumours() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchRumours = async () => {
-      try {
-        const supabase = createClient();
-        const { data, error } = await supabase
-          .from("rumours_with_scores")
-          .select("*")
-          .order("created_at", { ascending: false });
+  const fetchRumours = async () => {
+    try {
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from("rumours_with_scores")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-        if (error) {
-          console.error("Error fetching rumours:", error);
-          setError(error.message);
-          return;
-        }
-
-        setRumours(data || []);
-      } catch (err) {
-        console.error("Error fetching rumours:", err);
-        setError("Failed to fetch rumours");
-      } finally {
-        setLoading(false);
+      if (error) {
+        console.error("Error fetching rumours:", error);
+        setError(error.message);
+        return;
       }
-    };
 
+      setRumours(data || []);
+    } catch (err) {
+      console.error("Error fetching rumours:", err);
+      setError("Failed to fetch rumours");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchRumours();
   }, []);
 
-  return { rumours, loading, error };
+
+
+  return { rumours, loading, error, refetch: fetchRumours };
 }
 
 function RumoursTableSkeleton() {

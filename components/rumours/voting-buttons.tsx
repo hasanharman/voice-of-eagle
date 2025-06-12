@@ -99,7 +99,6 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
       }
 
       localStorage.setItem(rateLimitKey, now.toString());
-      window.location.reload();
     } catch (error) {
       console.error("Error voting:", error);
       toast.error(t('voting.failedToVote'));

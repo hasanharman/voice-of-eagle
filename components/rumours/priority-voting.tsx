@@ -106,7 +106,6 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
       }
 
       localStorage.setItem(rateLimitKey, now.toString());
-      window.location.reload();
     } catch (error) {
       console.error("Error voting priority:", error);
       toast.error(t('voting.failedToVote'));
