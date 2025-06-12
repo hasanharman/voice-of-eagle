@@ -15,6 +15,8 @@ import {
   ArrowUp,
   ArrowRight,
   ArrowUpDown,
+  Edit,
+  Trash2,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -30,10 +32,14 @@ import { VotingButtons } from "@/components/rumours/voting-buttons";
 import { VideoLinksPopover } from "@/components/rumours/video-links-popover";
 import { PriorityVoting } from "@/components/rumours/priority-voting";
 import { PositionsPopover } from "@/components/rumours/positions-popover";
+import { useAuth } from "@/hooks/useAuth";
+import { createClient } from "@/lib/supabase/client";
 
 export const createColumns = (
-  t: (key: string) => string
+  t: (key: string) => string,
+  onEditClick?: (id: string) => void
 ): ColumnDef<RumourWithScores>[] => {
+  const { isAdmin } = useAuth();
   return [
     {
       accessorKey: "photo_url",
@@ -300,12 +306,33 @@ export const createColumns = (
                   </a>
                 </DropdownMenuItem>
               )}
-              <DropdownMenuItem asChild>
-                <a href={`/rumours/edit/${rumour.id}`}>Edit rumour</a>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600">
-                Delete rumour
-              </DropdownMenuItem>
+              {isAdmin && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => onEditClick?.(rumour.id)}
+                  >
+                    <Edit className="mr-2 h-4 w-4" />
+                    {t("common.edit")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      if (confirm(t("common.confirmDelete"))) {
+                        const supabase = createClient();
+                        await supabase
+                          .from("transfer_rumours")
+                          .delete()
+                          .eq("id", rumour.id);
+                        window.location.reload();
+                      }
+                    }}
+                    className="text-destructive"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    {t("common.delete")}
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -314,4 +341,6 @@ export const createColumns = (
       enableHiding: false,
     },
   ];
+
+  return columns;
 };

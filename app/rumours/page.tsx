@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { DataTable } from "@/components/rumours/data-table";
 import { createColumns } from "@/components/rumours/columns";
+import { EditRumourDialog } from "@/components/rumours/edit-rumour-dialog";
 import { RumourWithScores } from "@/lib/types/rumours.types";
 import { AdminAddButton } from "@/components/rumours/admin-add-button";
 import { useI18n } from "@/lib/i18n/context";
@@ -43,33 +44,49 @@ function useRumours() {
   useEffect(() => {
     const supabase = createClient();
     
-    if (typeof supabase.channel === 'function') {
-      const subscription = supabase
-        .channel('rumours_changes')
-        .on('postgres_changes', 
-          { event: '*', schema: 'public', table: 'community_votes' },
-          () => {
-            console.log('Community vote changed, refetching...');
-            fetchRumours();
-          }
-        )
-        .on('postgres_changes', 
-          { event: '*', schema: 'public', table: 'priority_votes' },
-          () => {
-            console.log('Priority vote changed, refetching...');
-            fetchRumours();
-          }
-        )
-        .subscribe();
+    try {
+      if (typeof supabase.channel === 'function') {
+        const subscription = supabase
+          .channel('rumours_changes')
+          .on('postgres_changes', 
+            { event: '*', schema: 'public', table: 'community_votes' },
+            () => {
+              console.log('Community vote changed, refetching...');
+              fetchRumours();
+            }
+          )
+          .on('postgres_changes', 
+            { event: '*', schema: 'public', table: 'priority_votes' },
+            () => {
+              console.log('Priority vote changed, refetching...');
+              fetchRumours();
+            }
+          )
+          .subscribe((status: string) => {
+            if (status === 'SUBSCRIBED') {
+              console.log('Successfully subscribed to realtime changes');
+            } else if (status === 'CHANNEL_ERROR') {
+              console.warn('Realtime subscription error, falling back to polling');
+              setupPolling();
+            }
+          });
 
-      return () => {
-        subscription.unsubscribe();
-      };
-    } else {
-      console.log('Real-time functionality not available, using polling fallback');
+        return () => {
+          subscription.unsubscribe();
+        };
+      } else {
+        setupPolling();
+      }
+    } catch (error) {
+      console.warn('Realtime setup failed, using polling fallback:', error);
+      setupPolling();
+    }
+
+    function setupPolling() {
+      console.log('Setting up polling fallback for real-time updates');
       const interval = setInterval(() => {
         fetchRumours();
-      }, 5000);
+      }, 10000);
 
       return () => {
         clearInterval(interval);
@@ -117,6 +134,13 @@ export default function RumoursPage() {
 function RumoursTable() {
   const { t } = useI18n();
   const { rumours, loading, error } = useRumours();
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedRumourId, setSelectedRumourId] = useState<string | null>(null);
+
+  const handleEditClick = (rumourId: string) => {
+    setSelectedRumourId(rumourId);
+    setEditDialogOpen(true);
+  };
 
   if (loading) {
     return <RumoursTableSkeleton />;
@@ -130,5 +154,16 @@ function RumoursTable() {
     );
   }
 
-  return <DataTable columns={createColumns(t)} data={rumours} />;
+  const columns = createColumns(t, handleEditClick);
+
+  return (
+    <>
+      <DataTable columns={columns} data={rumours} />
+      <EditRumourDialog
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        rumourId={selectedRumourId}
+      />
+    </>
+  );
 }
