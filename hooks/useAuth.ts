@@ -57,18 +57,15 @@ export function useAuth() {
 
   const signInWithGoogle = async () => {
     try {
-      const response = await fetch('/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ provider: 'google' }),
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/confirm`
+        }
       })
-
-      const data = await response.json()
-
-      if (data.url) {
-        window.location.href = data.url
+      
+      if (error) {
+        console.error('Error signing in:', error)
       }
     } catch (error) {
       console.error('Error signing in:', error)
@@ -77,11 +74,10 @@ export function useAuth() {
 
   const signOut = async () => {
     try {
-      await fetch('/auth/logout', {
-        method: 'POST',
-      })
+      await supabase.auth.signOut()
       setUser(null)
       setIsAdmin(false)
+      window.location.href = '/auth/login'
     } catch (error) {
       console.error('Error signing out:', error)
     }
