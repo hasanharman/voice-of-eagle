@@ -341,6 +341,4 @@ export const createColumns = (
       enableHiding: false,
     },
   ];
-
-  return columns;
 };

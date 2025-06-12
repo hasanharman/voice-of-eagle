@@ -97,7 +97,7 @@ export function EditRumourDialog({ open, onOpenChange, rumourId }: EditRumourDia
       });
     } catch (error) {
       console.error('Error fetching rumour:', error);
-      toast.error(t("errors.fetchRumourFailed"));
+      console.error(t("errors.fetchRumourFailed"));
       onOpenChange(false);
     } finally {
       setIsLoading(false);
