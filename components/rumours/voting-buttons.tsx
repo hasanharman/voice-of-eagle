@@ -21,6 +21,8 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
   const [userVote, setUserVote] = useState<"upvote" | "downvote" | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showSignupDialog, setShowSignupDialog] = useState(false);
+  const [localApproval, setLocalApproval] = useState(rumour.community_approval);
+  const [localVotes, setLocalVotes] = useState(rumour.total_community_votes);
   const supabase = createClient();
 
   useEffect(() => {
@@ -138,10 +140,10 @@ export function VotingButtons({ rumour }: VotingButtonsProps) {
       </div>
       <div className="text-center">
         <div className={`text-sm font-medium ${approvalColor}`}>
-          {rumour.community_approval}%
+          {localApproval}%
         </div>
         <div className="text-xs text-muted-foreground">
-          {rumour.total_community_votes} votes
+          {localVotes} votes
         </div>
       </div>
       <SignupDialog 

@@ -28,6 +28,10 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
   >(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showSignupDialog, setShowSignupDialog] = useState(false);
+  const [localTotalVotes, setLocalTotalVotes] = useState(rumour.total_priority_votes);
+  const [localHighVotes, setLocalHighVotes] = useState(rumour.high_priority_votes);
+  const [localMediumVotes, setLocalMediumVotes] = useState(rumour.medium_priority_votes);
+  const [localLowVotes, setLocalLowVotes] = useState(rumour.low_priority_votes);
   const supabase = createClient();
 
   useEffect(() => {
@@ -131,7 +135,7 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
               {priorityLevel.toUpperCase()}
             </Badge>
             <div className="text-xs text-muted-foreground">
-              {rumour.total_priority_votes} votes
+              {localTotalVotes} votes
             </div>
           </div>
         </Button>
@@ -153,10 +157,10 @@ export function PriorityVoting({ rumour }: PriorityVotingProps) {
                 <span className="capitalize">{t('common.' + priority)} {t('priority.priority')}</span>
                 <Badge variant="secondary">
                   {priority === "high"
-                    ? rumour.high_priority_votes
+                    ? localHighVotes
                     : priority === "medium"
-                    ? rumour.medium_priority_votes
-                    : rumour.low_priority_votes}
+                    ? localMediumVotes
+                    : localLowVotes}
                 </Badge>
               </Button>
             ))}

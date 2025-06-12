@@ -14,6 +14,7 @@ import {
   ArrowDown,
   ArrowUp,
   ArrowRight,
+  ArrowUpDown,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -61,7 +62,18 @@ export const createColumns = (
     },
     {
       accessorKey: "player_name",
-      header: t("table.player"),
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="h-8 p-0 hover:bg-transparent"
+          >
+            {t("table.player")}
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
       cell: ({ row }) => {
         const player = row.original;
         return (
@@ -76,7 +88,18 @@ export const createColumns = (
     },
     {
       accessorKey: "nationality",
-      header: t("table.nationality"),
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="h-8 p-0 hover:bg-transparent"
+          >
+            {t("table.nationality")}
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
       cell: ({ row }) => {
         const player = row.original;
         if (!player.nationality || !player.nationality_code) return null;
@@ -130,7 +153,18 @@ export const createColumns = (
 
     {
       accessorKey: "market_value",
-      header: t("table.marketValue"),
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="h-8 p-0 hover:bg-transparent"
+          >
+            {t("table.marketValue")}
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
       cell: ({ row }) => {
         const value = row.original.market_value;
         if (!value) return <span className="text-muted-foreground">-</span>;
@@ -184,7 +218,18 @@ export const createColumns = (
     },
     {
       accessorKey: "created_at",
-      header: t("table.dateAdded"),
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="h-8 p-0 hover:bg-transparent"
+          >
+            {t("table.dateAdded")}
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
       cell: ({ row }) => {
         return (
           <span className="text-sm text-muted-foreground">

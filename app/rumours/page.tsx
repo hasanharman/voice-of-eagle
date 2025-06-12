@@ -40,7 +40,42 @@ function useRumours() {
     fetchRumours();
   }, []);
 
+  useEffect(() => {
+    const supabase = createClient();
+    
+    if (typeof supabase.channel === 'function') {
+      const subscription = supabase
+        .channel('rumours_changes')
+        .on('postgres_changes', 
+          { event: '*', schema: 'public', table: 'community_votes' },
+          () => {
+            console.log('Community vote changed, refetching...');
+            fetchRumours();
+          }
+        )
+        .on('postgres_changes', 
+          { event: '*', schema: 'public', table: 'priority_votes' },
+          () => {
+            console.log('Priority vote changed, refetching...');
+            fetchRumours();
+          }
+        )
+        .subscribe();
 
+      return () => {
+        subscription.unsubscribe();
+      };
+    } else {
+      console.log('Real-time functionality not available, using polling fallback');
+      const interval = setInterval(() => {
+        fetchRumours();
+      }, 5000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, []);
 
   return { rumours, loading, error, refetch: fetchRumours };
 }
