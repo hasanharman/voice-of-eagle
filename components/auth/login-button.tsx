@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button"
 import { useAuth } from "@/hooks/useAuth"
 
 export function LoginButton() {
-  const { signInWithGoogle, loading } = useAuth()
+  const { signInWithGoogle, loading, user } = useAuth()
+
+  if (user) return null; // Hide button if logged in
 
   return (
     <Button 

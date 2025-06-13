@@ -8,93 +8,42 @@ import { EditRumourDialog } from "@/components/rumours/edit-rumour-dialog";
 import { RumourWithScores } from "@/lib/types/rumours.types";
 import { AdminAddButton } from "@/components/rumours/admin-add-button";
 import { useI18n } from "@/lib/i18n/context";
+import { useAuth } from "@/hooks/useAuth";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 function useRumours() {
-  const [rumours, setRumours] = useState<RumourWithScores[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   const fetchRumours = async () => {
-    try {
-      const supabase = createClient();
-      const { data, error } = await supabase
-        .from("rumours_with_scores")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.error("Error fetching rumours:", error);
-        setError(error.message);
-        return;
-      }
-
-      setRumours(data || []);
-    } catch (err) {
-      console.error("Error fetching rumours:", err);
-      setError("Failed to fetch rumours");
-    } finally {
-      setLoading(false);
-    }
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from("rumours_with_scores")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) throw new Error(error.message);
+    return data || [];
   };
 
+  const {
+    data: rumours = [],
+    isLoading: loading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["rumours", user?.id],
+    queryFn: fetchRumours,
+    staleTime: 1000 * 60, // 1 minute
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+  });
+
+  // Refetch on auth state change
   useEffect(() => {
-    fetchRumours();
-  }, []);
+    refetch();
+  }, [user, refetch]);
 
-  useEffect(() => {
-    const supabase = createClient();
-    
-    try {
-      if (typeof supabase.channel === 'function') {
-        const subscription = supabase
-          .channel('rumours_changes')
-          .on('postgres_changes', 
-            { event: '*', schema: 'public', table: 'community_votes' },
-            () => {
-              console.log('Community vote changed, refetching...');
-              fetchRumours();
-            }
-          )
-          .on('postgres_changes', 
-            { event: '*', schema: 'public', table: 'priority_votes' },
-            () => {
-              console.log('Priority vote changed, refetching...');
-              fetchRumours();
-            }
-          )
-          .subscribe((status: string) => {
-            if (status === 'SUBSCRIBED') {
-              console.log('Successfully subscribed to realtime changes');
-            } else if (status === 'CHANNEL_ERROR') {
-              console.warn('Realtime subscription error, falling back to polling');
-              setupPolling();
-            }
-          });
-
-        return () => {
-          subscription.unsubscribe();
-        };
-      } else {
-        setupPolling();
-      }
-    } catch (error) {
-      console.warn('Realtime setup failed, using polling fallback:', error);
-      setupPolling();
-    }
-
-    function setupPolling() {
-      console.log('Setting up polling fallback for real-time updates');
-      const interval = setInterval(() => {
-        fetchRumours();
-      }, 10000);
-
-      return () => {
-        clearInterval(interval);
-      };
-    }
-  }, []);
-
-  return { rumours, loading, error, refetch: fetchRumours };
+  return { rumours, loading, error, refetch };
 }
 
 function RumoursTableSkeleton() {
@@ -113,15 +62,13 @@ function RumoursTableSkeleton() {
 
 export default function RumoursPage() {
   const { t } = useI18n();
-  
+
   return (
     <div className="container mx-auto py-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold">{t('rumours.title')}</h1>
-          <p className="text-muted-foreground">
-            {t('rumours.subtitle')}
-          </p>
+          <h1 className="text-3xl font-bold">{t("rumours.title")}</h1>
+          <p className="text-muted-foreground">{t("rumours.subtitle")}</p>
         </div>
         <AdminAddButton />
       </div>
@@ -134,6 +81,7 @@ export default function RumoursPage() {
 function RumoursTable() {
   const { t } = useI18n();
   const { rumours, loading, error } = useRumours();
+  const { isAdmin } = useAuth();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedRumourId, setSelectedRumourId] = useState<string | null>(null);
 
@@ -149,12 +97,15 @@ function RumoursTable() {
   if (error) {
     return (
       <div className="text-center py-8">
-        <p className="text-red-500">{t('rumours.errorLoading')}: {error}</p>
+        <p className="text-red-500">
+          {t("rumours.errorLoading")}:{" "}
+          {typeof error === "string" ? error : error?.message}
+        </p>
       </div>
     );
   }
 
-  const columns = createColumns(t, handleEditClick);
+  const columns = createColumns(t, handleEditClick, isAdmin);
 
   return (
     <>
@@ -166,4 +117,24 @@ function RumoursTable() {
       />
     </>
   );
+}
+
+function clearSupabaseAuthCookies() {
+  // Clear generic names (for legacy)
+  document.cookie = "sb-access-token=; Max-Age=0; path=/";
+  document.cookie = "sb-refresh-token=; Max-Age=0; path=/";
+  for (let i = 0; i < 5; i++) {
+    document.cookie = `sb-access-token.${i}=; Max-Age=0; path=/`;
+    document.cookie = `sb-refresh-token.${i}=; Max-Age=0; path=/`;
+  }
+  // Dynamically clear all sb-*-auth-token and sb-*-refresh-token cookies
+  document.cookie
+    .split(";")
+    .map((c) => c.trim())
+    .forEach((cookie) => {
+      const [name] = cookie.split("=");
+      if (/^sb-.*-(auth|refresh)-token$/.test(name)) {
+        document.cookie = `${name}=; Max-Age=0; path=/`;
+      }
+    });
 }

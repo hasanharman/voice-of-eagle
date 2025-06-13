@@ -32,14 +32,13 @@ import { VotingButtons } from "@/components/rumours/voting-buttons";
 import { VideoLinksPopover } from "@/components/rumours/video-links-popover";
 import { PriorityVoting } from "@/components/rumours/priority-voting";
 import { PositionsPopover } from "@/components/rumours/positions-popover";
-import { useAuth } from "@/hooks/useAuth";
 import { createClient } from "@/lib/supabase/client";
 
 export const createColumns = (
   t: (key: string) => string,
-  onEditClick?: (id: string) => void
+  onEditClick?: (id: string) => void,
+  isAdmin?: boolean
 ): ColumnDef<RumourWithScores>[] => {
-  const { isAdmin } = useAuth();
   return [
     {
       accessorKey: "photo_url",

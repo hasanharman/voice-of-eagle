@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Edu_AU_VIC_WA_NT_Hand } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { QueryProvider } from '@/components/QueryProvider';
 
 import "./globals.css";
 
@@ -77,7 +78,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html>
+    <html
+      suppressHydrationWarning
+    >
       <head>
         <script
           defer
@@ -88,17 +91,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${eduAU.variable} antialiased`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <I18nProvider>
-            <AuthProvider>
-              <Navbar />
-              <main className="h-[calc(100vh-68px)] bg-background">
-                {children}
-              </main>
-              <Toaster />
-            </AuthProvider>
-          </I18nProvider>
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <I18nProvider>
+              <AuthProvider>
+                <Navbar />
+                <main className="h-[calc(100vh-68px)] bg-background">
+                  {children}
+                </main>
+                <Toaster />
+              </AuthProvider>
+            </I18nProvider>
+          </ThemeProvider>
+        </QueryProvider>
       </body>
       <GoogleAnalytics gaId="G-3YSWM1MXZK" />
     </html>

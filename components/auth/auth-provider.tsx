@@ -22,28 +22,56 @@ export const useAuthContext = () => {
   return context
 }
 
+function clearSupabaseAuthCookies() {
+  document.cookie = 'sb-access-token=; Max-Age=0; path=/';
+  document.cookie = 'sb-refresh-token=; Max-Age=0; path=/';
+  for (let i = 0; i < 5; i++) {
+    document.cookie = `sb-access-token.${i}=; Max-Age=0; path=/`;
+    document.cookie = `sb-refresh-token.${i}=; Max-Age=0; path=/`;
+  }
+}
+
+async function getUserWithTimeout(supabase: any, timeoutMs = 3000) {
+  return Promise.race([
+    supabase.auth.getUser(),
+    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeoutMs)),
+  ]);
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
 
   useEffect(() => {
+    let unsubscribed = false;
     const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
-      setLoading(false)
+      try {
+        const { data: { user } } = await getUserWithTimeout(supabase, 3000)
+        if (unsubscribed) return;
+        setUser(user)
+      } catch (e) {
+        clearSupabaseAuthCookies()
+        setUser(null)
+      } finally {
+        if (!unsubscribed) setLoading(false)
+      }
     }
 
     getUser()
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event: any, session: any) => {
+        if (unsubscribed) return;
         setUser(session?.user ?? null)
         setLoading(false)
       }
     )
 
-    return () => subscription.unsubscribe()
+    return () => {
+      unsubscribed = true;
+      subscription.unsubscribe()
+    }
   }, [supabase.auth])
 
   return (
