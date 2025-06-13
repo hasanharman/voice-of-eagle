@@ -17,8 +17,6 @@ interface VideoLinksPopoverProps {
 
 // Helper function to extract YouTube video ID from URL
 function getYouTubeVideoId(url: string): string | null {
-  console.log("Extracting YouTube video ID from URL:", url);
-
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/live\/)([^&\n?#]+)/,
     /youtube\.com\/embed\/([^&\n?#]+)/,

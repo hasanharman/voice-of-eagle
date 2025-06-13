@@ -92,7 +92,7 @@ export default function RootLayout({
           <I18nProvider>
             <AuthProvider>
               <Navbar />
-              <main className="h-[calc(100vh-68px)] bg-background">
+              <main className="h-[calc(100vh-68px)] bg-background px-5 ">
                 {children}
               </main>
               <Toaster />
